@@ -4,13 +4,15 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-
 @Component({
-  selector: 'file-upload',
-  templateUrl: './file-upload.component.html',
-  styleUrls: ['./file-upload.component.scss']
+  selector: 'app-scan',
+  templateUrl: './scan.component.html',
+  styleUrls: ['./scan.component.scss']
 })
-export class FileUploadComponent {
+export class ScanComponent {
+  book: string;
+  chapter = 1;
+  page = 1;
 
   // Main task
   task: AngularFireUploadTask;

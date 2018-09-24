@@ -1,32 +1,25 @@
 
+Book
+<input style="padding: 2px; margin: 0 2px 2px 0; width: 300px;" type="text" placeholder="Enter book title" [(ngModel)]="book" autocomplete="off" autocorrect="off" />
+Chapter/Section
+<input style="padding: 2px; margin: 0 2px 2px 0; width: 50px;" type="number" placeholder="Ch" [(ngModel)]="chapter" autocomplete="off" autocorrect="off" />
+Page
+<input style="padding: 2px; margin: 0 2px 2px 0; width: 50px;" type="number" placeholder="Page" [(ngModel)]="page" autocomplete="off" autocorrect="off" />
 
 <div class="dropzone" 
-     dropZone
+     appDropZone
      (hovered)="toggleHover($event)"
      (dropped)="startUpload($event)"
-     [class.hovering]="isHovering">
-
-
-
-
+     [class.hovering]="isHovering"
+     *ngIf="book && chapter && page"
+     >
 
      <h3>AngularFire Drop Zone</h3>
      <p>Drag and Drop a File</p>
      <div class="file">
         <label class="file-label">
-
-
-
-
         <input class="file-input" type="file" (change)="startUpload($event.target.files)">
-
-
-
-
           <span class="file-cta">
-            <span class="file-icon">
-              <i class="fa fa-upload"></i>
-            </span>
             <span class="file-label">
               or choose a file…
             </span>
