@@ -1,4 +1,5 @@
 import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
 
 // Cloud Vision
 import * as vision from '@google-cloud/vision';
@@ -12,18 +13,14 @@ export const textExtraction = functions.storage
 
             const imageUri = `gs://${fileBucket}/${filePath}`;
 
-            const docId = filePath.split('.jpg')[0];
-
-            // const docRef  = admin.firestore().collection('photos').doc(docId);
+            const docRef  = admin.firestore().collection('pages');
 
             // Text Extraction
             const textRequest = await visionClient.documentTextDetection(imageUri);
             const fullText = textRequest[0].textAnnotations[0];
             const text =  fullText ? fullText.description : null;
 
-            console.log(text)
             // Save to Firestore
-            // const data = { text, web, faces, landmarks }
-            return;
-            // return docRef.set(text);
+            const data = { text, filePath }
+            return docRef.add(data);
 });
