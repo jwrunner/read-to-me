@@ -1,7 +1,6 @@
-// const fs = require('fs');
-
-// // Imports the Google Cloud client library
-// const textToSpeech = require('@google-cloud/text-to-speech');
+// import * as textToSpeech from '@google-cloud/text-to-speech';
+// import * as Storage from '@google-cloud/storage';
+// const gcs = new Storage();
 
 // // Creates a client
 // const client = new textToSpeech.TextToSpeechClient();
@@ -24,13 +23,16 @@
 //     console.error('ERROR:', err);
 //     return;
 //   }
+//   gcs.bucket('read-books-to-me').upload(response.audioContent, {
+//       destination: 'output.mp3'
+//   } )
 
-//   // Write the binary audio content to a local file
-//   fs.writeFile('output.mp3', response.audioContent, 'binary', err => {
-//     if (err) {
-//       console.error('ERROR:', err);
-//       return;
-//     }
-//     console.log('Audio content written to file: output.mp3');
-//   });
+//   //Write the binary audio content to a local file
+// //   fs.writeFile('output.mp3', response.audioContent, 'binary', err => {
+// //     if (err) {
+// //       console.error('ERROR:', err);
+// //       return;
+// //     }
+// //     console.log('Audio content written to file: output.mp3');
+// //   });
 // });

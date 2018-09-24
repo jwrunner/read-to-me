@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
-import { Subscription } from 'rxjs';
+import { AngularFirestore } from 'angularfire2/firestore';
 
 export interface Page {
-  filePath: string;
+  pageName: string;
   text: string;
   audioPath?: string;
 }
@@ -22,6 +21,6 @@ export class ListenComponent implements OnInit {
 ) {}
 
   ngOnInit() {
-    this.pages$ = this.afs.collection('pages', ref => ref.orderBy('filePath')).valueChanges();
+    this.pages$ = this.afs.collection<Page>('pages', ref => ref.orderBy('pageName')).valueChanges();
   }
 }

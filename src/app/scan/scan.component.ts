@@ -48,7 +48,7 @@ export class ScanComponent {
     const path = `${this.book}_ch${this.chapter}_p${this.page}`;
 
     // Totally optional metadata
-    const customMetadata = { Date: `${new Date().getTime()}` };
+    const customMetadata = { Date: `scans/${new Date().getTime()}` };
 
     // The main task
     this.task = this.storage.upload(path, file, { customMetadata });
