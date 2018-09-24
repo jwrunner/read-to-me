@@ -45,11 +45,20 @@ export const textExtraction = functions.storage
                 return;
             }
             // Upload audio to Firebase Storage
+            // TODO: Save response.audioContent to tmpdir (local file system) and then replace with path to file
+            // Example way to write the binary audio content to a local file
+            // fs.writeFile('output.mp3', response.audioContent, 'binary', err => {
+            //     if (err) {
+            //         console.error('ERROR:', err);
+            //         return;
+            //     }
+            //     console.log('Audio content written to file: output.mp3');
+            // });
             gcs.bucket(fileBucket).upload(response.audioContent, {
                 destination: 'output.mp3'
             })
-            .then(() => {console.log('audio uploaded successfully')})
-            .catch((error) => {console.log(error)});
+                .then(() => { console.log('audio uploaded successfully') })
+                .catch((error) => { console.log(error) });
         });
 
         // Save Text to Firestore
