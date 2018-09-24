@@ -45,7 +45,7 @@ export class ScanComponent {
     }
 
     // The storage path
-    const path = `scans/${this.book}_ch${this.chapter}_p${this.page}`;
+    const path = `${this.book}_ch${this.chapter}_p${this.page}`;
 
     // Totally optional metadata
     const customMetadata = { Date: `${new Date().getTime()}` };

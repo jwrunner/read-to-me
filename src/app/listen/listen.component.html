@@ -1,10 +1,4 @@
-<p>
-  listen works!
-</p>
-
-<!-- <div *ngIf="result$ | async as result">
-
-  <h3>Extracted Text</h3>
-
-  <p>{{ result.text }}</p>
-</div> -->
+<div *ngFor="let page of pages$ | async">
+  <h3>{{page.filePath}}</h3>
+  <p>{{ page.text }}</p>
+</div>
