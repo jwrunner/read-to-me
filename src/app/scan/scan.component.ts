@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
-import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -28,7 +27,7 @@ export class ScanComponent {
   // State for dropzone CSS toggling
   isHovering: boolean;
 
-  constructor(private storage: AngularFireStorage, private db: AngularFirestore) { }
+  constructor(private storage: AngularFireStorage) { }
 
 
   toggleHover(event: boolean) {
@@ -37,20 +36,19 @@ export class ScanComponent {
 
 
   startUpload(event: FileList) {
-    // The File object
     const file = event.item(0);
 
-    // Client-side validation example
+    // Client-side validation for images
     if (file.type.split('/')[0] !== 'image') {
       console.error('unsupported file type :( ');
       return;
     }
 
     // The storage path
-    const path = `scans/${new Date().getTime()}`;
+    const path = `scans/${this.book}_ch${this.chapter}_p${this.page}`;
 
     // Totally optional metadata
-    const customMetadata = { app: 'My AngularFire-powered PWA!' };
+    const customMetadata = { Date: `${new Date().getTime()}` };
 
     // The main task
     this.task = this.storage.upload(path, file, { customMetadata });
@@ -61,25 +59,10 @@ export class ScanComponent {
       tap(snap => {
         console.log(snap);
         if (snap.bytesTransferred === snap.totalBytes) {
-          // Update firestore on completion
-          this.db.collection('photos').add({ path, size: snap.totalBytes });
+          this.page++;
         }
       })
     );
-
-
-    // The file's download URL
-    // TODO, not working
-    // this.downloadURL = this.task.downloadURL();
   }
-
-
-
-  // Determines if the upload task is active
-  isActive(snapshot) {
-    return snapshot.state === 'running' && snapshot.bytesTransferred < snapshot.totalBytes;
-  }
-
-
 }
 
