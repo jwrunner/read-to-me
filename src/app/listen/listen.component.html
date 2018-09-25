@@ -1,4 +1,6 @@
 <div *ngFor="let page of pages$ | async">
   <h3>{{ page.pageName }}</h3>
+  <small *ngIf="page.audioPath">{{getUrl(page.audioPath)}}</small>
+  <audio *ngIf="page.audioPath" controls="true" [src]="getUrl(page.audioPath)"></audio>
   <p>{{ page.text }}</p>
 </div>

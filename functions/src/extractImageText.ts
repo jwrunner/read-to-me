@@ -5,6 +5,11 @@ import * as admin from 'firebase-admin';
 import * as Storage from '@google-cloud/storage';
 const gcs = new Storage();
 
+import { tmpdir } from 'os';
+import { join, dirname } from 'path';
+import * as fs from 'fs';
+import * as fse from 'fs-extra';
+
 // Cloud Vision
 import * as vision from '@google-cloud/vision';
 const visionClient = new vision.ImageAnnotatorClient();
@@ -13,11 +18,20 @@ const visionClient = new vision.ImageAnnotatorClient();
 import * as textToSpeech from '@google-cloud/text-to-speech';
 const client = new textToSpeech.TextToSpeechClient();
 
+
+
 export const textExtraction = functions.storage
     .object()
     .onFinalize(async object => {
+        if (!object.contentType.includes('image')) {
+            console.log('exiting function');
+            return false;
+        }
+
         const fileBucket = object.bucket;
         const filePath = object.name;
+        const pageName = filePath.split('/').pop();
+        const bucketDir = dirname(filePath);
 
         const imageUri = `gs://${fileBucket}/${filePath}`;
         const docRef = admin.firestore().collection('pages');
@@ -37,6 +51,13 @@ export const textExtraction = functions.storage
         };
         console.log('finished constructing the text-so-speech request');
 
+        // Creat temp directory
+        const workingDir = join(tmpdir(), 'synthesized');
+        const tmpFilePath = join(workingDir, 'output.mp3');
+
+        // Ensure temp directory exists
+        await fse.ensureDir(workingDir);
+
         // Performs the Text-to-Speech request
         client.synthesizeSpeech(request, (err, response) => {
             console.log('starting the speech synthesizer');
@@ -44,25 +65,26 @@ export const textExtraction = functions.storage
                 console.error('ERROR:', err);
                 return;
             }
+
+
+            // Write the binary audio content to a local file in temp directory
+            fs.writeFile(tmpFilePath, response.audioContent, 'binary', writeErr => {
+                if (writeErr) {
+                    console.error('ERROR:', writeErr);
+                    return;
+                }
+                console.log('Audio content written to: ', tmpFilePath);
+            });
+
             // Upload audio to Firebase Storage
-            // TODO: Save response.audioContent to tmpdir (local file system) and then replace with path to file
-            // Example way to write the binary audio content to a local file
-            // fs.writeFile('output.mp3', response.audioContent, 'binary', err => {
-            //     if (err) {
-            //         console.error('ERROR:', err);
-            //         return;
-            //     }
-            //     console.log('Audio content written to file: output.mp3');
-            // });
-            gcs.bucket(fileBucket).upload(response.audioContent, {
-                destination: 'output.mp3'
+            gcs.bucket(fileBucket).upload(tmpFilePath, {
+                destination: join(bucketDir, pageName)
             })
                 .then(() => { console.log('audio uploaded successfully') })
                 .catch((error) => { console.log(error) });
         });
 
         // Save Text to Firestore
-        const pageName = filePath.split('/').pop();
         const date = new Date().getTime();
         const data = { text, pageName, date }
         docRef.add(data)
@@ -80,5 +102,5 @@ export const textExtraction = functions.storage
                 console.log(err);
             })
 
-        return;
+        return fse.remove(workingDir);
     });
