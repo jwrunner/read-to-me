@@ -49,7 +49,7 @@ export const textExtraction = functions.storage
             // Select the type of audio encoding
             audioConfig: { audioEncoding: 'MP3' },
         };
-        console.log('finished constructing the text-so-speech request');
+        console.log('finished constructing the text-so-speech request:', request);
 
         // Creat temp directory
         const workingDir = join(tmpdir(), 'synthesized');
@@ -73,21 +73,8 @@ export const textExtraction = functions.storage
         client.synthesizeSpeech(request)
             .then(responses => {
                 const response = responses[0];
+                console.log('audio response: ', response.audioContent);
                 return writeFilePromise(tmpFilePath, response.audioContent, 'binary');
-                // Write the binary audio content to a local file in temp directory
-                // fs.writeFile(tmpFilePath, response.audioContent, 'binary', writeErr => {
-                //     if (writeErr) {
-                //         console.error('Write ERROR:', writeErr);
-                //         return;
-                //     }
-                //     console.log('Audio content written to: ', tmpFilePath);
-                //     // Upload audio to Firebase Storage
-                //     gcs.bucket(fileBucket).upload(tmpFilePath, {
-                //         destination: join(bucketDir, pageName)
-                //     })
-                //         .then(() => { console.log('audio uploaded successfully') })
-                //         .catch((error) => { console.log(error) });
-                // });
             })
             .then(() => {
                 return gcs.bucket(fileBucket).upload(tmpFilePath, {
