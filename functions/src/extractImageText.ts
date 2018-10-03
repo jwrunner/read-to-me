@@ -59,36 +59,37 @@ export const textExtraction = functions.storage
         await fse.ensureDir(workingDir);
 
         // Performs the Text-to-Speech request
-        client.synthesizeSpeech(request, (err, response) => {
-            console.log('starting the speech synthesizer');
-            if (err) {
-                console.error('ERROR:', err);
-                return;
-            }
-
-
-            // Write the binary audio content to a local file in temp directory
-            fs.writeFile(tmpFilePath, response.audioContent, 'binary', writeErr => {
-                if (writeErr) {
-                    console.error('ERROR:', writeErr);
-                    return;
-                }
-                console.log('Audio content written to: ', tmpFilePath);
-            });
-
-            // Upload audio to Firebase Storage
-            gcs.bucket(fileBucket).upload(tmpFilePath, {
-                destination: join(bucketDir, pageName)
+        console.log('about to start the speech synthesizer');
+        client.synthesizeSpeech(request)
+            .then(responses => {
+                const response = responses[0];
+                console.log('synthesizeSpeech response: ', response);
+                console.log('synthesizeSpeech response.audioContent: ', response.audioContent);
+                // Write the binary audio content to a local file in temp directory
+                fs.writeFile(tmpFilePath, response.audioContent, 'binary', writeErr => {
+                    if (writeErr) {
+                        console.error('Write ERROR:', writeErr);
+                        return;
+                    }
+                    console.log('Audio content written to: ', tmpFilePath);
+                    // Upload audio to Firebase Storage
+                    gcs.bucket(fileBucket).upload(tmpFilePath, {
+                        destination: join(bucketDir, pageName)
+                    })
+                        .then(() => { console.log('audio uploaded successfully') })
+                        .catch((error) => { console.log(error) });
+                });
             })
-                .then(() => { console.log('audio uploaded successfully') })
-                .catch((error) => { console.log(error) });
-        });
+            .catch(err => {
+                console.error('Synthesize ERROR:', err);
+            });
 
         // Save Text to Firestore
         const date = new Date().getTime();
         const data = { text, pageName, date }
         docRef.add(data)
             .then(() => {
+                // Delete image
                 gcs.bucket(fileBucket)
                     .file(pageName)
                     .delete()
@@ -96,11 +97,12 @@ export const textExtraction = functions.storage
                         console.log(`gs://${fileBucket}/${pageName} deleted.`);
                     })
                     .catch(err => {
-                        console.error('ERROR:', err);
+                        console.error('Delete image ERROR:', err);
                     });
             }).catch((err) => {
                 console.log(err);
             })
 
+        // Clean up temp directory
         return fse.remove(workingDir);
     });
