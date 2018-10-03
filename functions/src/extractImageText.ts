@@ -58,36 +58,54 @@ export const textExtraction = functions.storage
         // Ensure temp directory exists
         await fse.ensureDir(workingDir);
 
+        // Turn fs.writeFile into a Promise
+        const writeFilePromise = (file, data, option) => {
+            return new Promise((resolve, reject) => {
+                fs.writeFile(file, data, option, error => {
+                    if (error) reject(error);
+                    resolve("File created! Time for the next step!");
+                });
+            });
+        };
+
         // Performs the Text-to-Speech request
         console.log('about to start the speech synthesizer');
         client.synthesizeSpeech(request)
             .then(responses => {
                 const response = responses[0];
-                console.log('synthesizeSpeech response: ', response);
-                console.log('synthesizeSpeech response.audioContent: ', response.audioContent);
+                return writeFilePromise(tmpFilePath, response.audioContent, 'binary');
                 // Write the binary audio content to a local file in temp directory
-                fs.writeFile(tmpFilePath, response.audioContent, 'binary', writeErr => {
-                    if (writeErr) {
-                        console.error('Write ERROR:', writeErr);
-                        return;
-                    }
-                    console.log('Audio content written to: ', tmpFilePath);
-                    // Upload audio to Firebase Storage
-                    gcs.bucket(fileBucket).upload(tmpFilePath, {
-                        destination: join(bucketDir, pageName)
-                    })
-                        .then(() => { console.log('audio uploaded successfully') })
-                        .catch((error) => { console.log(error) });
+                // fs.writeFile(tmpFilePath, response.audioContent, 'binary', writeErr => {
+                //     if (writeErr) {
+                //         console.error('Write ERROR:', writeErr);
+                //         return;
+                //     }
+                //     console.log('Audio content written to: ', tmpFilePath);
+                //     // Upload audio to Firebase Storage
+                //     gcs.bucket(fileBucket).upload(tmpFilePath, {
+                //         destination: join(bucketDir, pageName)
+                //     })
+                //         .then(() => { console.log('audio uploaded successfully') })
+                //         .catch((error) => { console.log(error) });
+                // });
+            })
+            .then(() => {
+                return gcs.bucket(fileBucket).upload(tmpFilePath, {
+                    destination: join(bucketDir, pageName)
                 });
             })
-            .catch(err => {
-                console.error('Synthesize ERROR:', err);
+            .then(() => {
+                console.log('audio uploaded successfully');
+                return null;
+            })
+            .catch(error => {
+                console.error('Synthesize speech + write + upload error:', error);
             });
 
         // Save Text to Firestore
         const date = new Date().getTime();
-        const data = { text, pageName, date }
-        docRef.add(data)
+        const pageData = { text, pageName, date }
+        docRef.add(pageData)
             .then(() => {
                 // Delete image
                 gcs.bucket(fileBucket)
@@ -104,5 +122,6 @@ export const textExtraction = functions.storage
             })
 
         // Clean up temp directory
-        return fse.remove(workingDir);
+        // return fse.remove(workingDir);
+        return null;
     });
