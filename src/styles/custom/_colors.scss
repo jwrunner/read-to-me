@@ -1,0 +1,8 @@
+$app-primary: mat-palette($mat-brown);
+$app-accent: mat-palette($mat-blue-grey);
+// The warn palette is optional (defaults to red).
+$app-warn: mat-palette($mat-red);
+
+$rtm-primary: mat-color($app-primary);
+$rtm-accent: mat-color($app-accent);
+$rtm-warn: mat-color($app-warn);

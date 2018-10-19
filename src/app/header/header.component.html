@@ -1,0 +1,23 @@
+<mat-toolbar color="primary">
+  <a mat-button routerLink="/" class="p-0 mr-auto">
+    <h2>Read to Me</h2>
+  </a>
+
+  <a mat-button routerLinkActive="active" routerLink="scan" class="mr-1">Scan</a>
+  <a mat-button routerLinkActive="active" routerLink="listen">Listen</a>
+
+
+  <!-- <a mat-button routerLink="/user" *ngIf="auth.user | async as user; else login">
+    <span [ngClass]="{'hidden-xs-down' : user.photoURL}">
+      {{ user.displayName | firstname }}
+    </span>
+    <img *ngIf="user.photoURL" class="profile" [src]="user.photoURL">
+  </a> -->
+
+  <!-- User NOT logged in -->
+  <!-- <ng-template #login>
+    <a mat-button routerLink="/user/login">
+      Log In
+    </a>
+  </ng-template> -->
+</mat-toolbar>

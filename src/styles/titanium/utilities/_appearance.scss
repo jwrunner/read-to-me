@@ -1,0 +1,41 @@
+// Text Utilities
+.text-muted {
+  opacity: 0.8; //   color: gray;
+}
+
+.text-nowrap {
+  white-space: nowrap;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-sm-left {
+  @include min-width($sm) {
+    text-align: left;
+  }
+}
+
+.truncate {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+}
+
+.paragraph {
+  max-width: 700px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+small,
+.small {
+  font-size: 80%;
+}
+
+// Misc Utilities
+.pointer {
+  cursor: pointer;
+}

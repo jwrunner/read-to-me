@@ -1,27 +1,24 @@
-Book
-<input style="padding: 2px; margin: 0 2px 2px 0; width: 300px;" type="text" placeholder="Enter book title" [(ngModel)]="book"
-  autocomplete="off" autocorrect="off" />
-Chapter/Section
-<input style="padding: 2px; margin: 0 2px 2px 0; width: 50px;" type="number" placeholder="Ch" [(ngModel)]="chapter"
-  autocomplete="off" autocorrect="off" />
-Page
-<input style="padding: 2px; margin: 0 2px 2px 0; width: 50px;" type="number" placeholder="Page" [(ngModel)]="page"
-  autocomplete="off" autocorrect="off" />
+<mat-form-field class="mr-1" style="width: 300px;">
+  <input matInput placeholder="Enter book title" [(ngModel)]="book" type="text">
+</mat-form-field>
+
+<mat-form-field class="mr-1" style="width: 80px;">
+  <input matInput placeholder="Ch/Section" [(ngModel)]="chapter" type="number">
+</mat-form-field>
+
+<mat-form-field style="width: 60px;">
+  <input matInput placeholder="Page" [(ngModel)]="page" type="number">
+</mat-form-field>
+
 
 <div class="dropzone" appDropZone (hovered)="toggleHover($event)" (dropped)="startUpload($event)" [class.hovering]="isHovering"
   *ngIf="book && chapter && page">
 
   <h3>Drag and Drop an Image</h3>
-  <div class="file">
-    <label class="file-label">
-      <input class="file-input" type="file" (change)="startUpload($event.target.files)">
-      <span class="file-cta">
-        <span class="file-label">
-          or choose a file…
-        </span>
-      </span>
-    </label>
-  </div>
+  <label class="file-label">
+    <input style="display: none;" type="file" (change)="startUpload($event.target.files)">
+    or choose a file…
+  </label>
 
   <div *ngIf="percentage | async as pct">
     <progress [value]="pct" max="100"></progress>

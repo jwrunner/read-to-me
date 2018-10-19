@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css?family=Google+Sans:300,400,500');
+// @import url('https://fonts.googleapis.com/css?family=Noto+Sans:400,700|Open+Sans:400,700');
+
+body,
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Google Sans", Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+  font-weight: 300;
+  // font-family: "Noto Sans", Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+  // font-weight: 400;
+
+  // display: grid;
+  // grid-template-rows: 1fr auto;
+  // min-height: 100vh; 
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  // font-family: "Open Sans", "Noto Sans", Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+  font-weight: 400;
+  // font-weight: 500;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  padding: 0 8px;
+}
+
+footer {
+  background: #ededed;
+  padding: 20px 8px;
+}

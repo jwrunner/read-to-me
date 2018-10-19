@@ -1,0 +1,51 @@
+.hidden-xs-down {
+  @include max-width($sm) {
+    display: none !important;
+  }
+}
+
+.hidden-sm-down {
+  @include max-width($md) {
+    display: none !important;
+  }
+}
+
+.hidden-md-down {
+  @include max-width($lg) {
+    display: none !important;
+  }
+}
+
+.hidden-lg-down {
+  @include max-width($xl) {
+    display: none !important;
+  }
+}
+
+.d-none {
+  display: none !important;
+}
+
+.hidden-sm-up {
+  @include min-width($sm) {
+    display: none !important;
+  }
+}
+
+.hidden-md-up {
+  @include min-width($md) {
+    display: none !important;
+  }
+}
+
+.hidden-lg-up {
+  @include min-width($lg) {
+    display: none !important;
+  }
+}
+
+.hidden-xl-up {
+  @include min-width($xl) {
+    display: none !important;
+  }
+}
