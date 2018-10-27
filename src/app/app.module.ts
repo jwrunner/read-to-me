@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 // Material
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatToolbarModule, MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+import { MatToolbarModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatExpansionModule } from '@angular/material';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
@@ -45,6 +45,7 @@ import { HeaderComponent } from './header/header.component';
         MatButtonModule,
         MatFormFieldModule,
         MatInputModule,
+        MatExpansionModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

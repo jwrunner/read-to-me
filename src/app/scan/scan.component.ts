@@ -1,17 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, first } from 'rxjs/operators';
+import { AngularFirestore } from 'angularfire2/firestore';
+
+export interface Bookmark {
+    book: string;
+    chapter: number;
+    page: number;
+}
 
 @Component({
     selector: 'app-scan',
     templateUrl: './scan.component.html',
     styleUrls: ['./scan.component.scss']
 })
-export class ScanComponent {
-    book: string;
-    chapter = 1;
-    page = 1;
+export class ScanComponent implements OnInit {
+    bookmark: Bookmark = {
+        book: '',
+        chapter: 1,
+        page: 1,
+    };
 
     // Main task
     task: AngularFireUploadTask;
@@ -27,8 +36,14 @@ export class ScanComponent {
     // State for dropzone CSS toggling
     isHovering: boolean;
 
-    constructor(private storage: AngularFireStorage) { }
+    constructor(
+        private afs: AngularFirestore,
+        private storage: AngularFireStorage,
+    ) { }
 
+    ngOnInit() {
+        this.getBookmark();
+    }
 
     toggleHover(event: boolean) {
         this.isHovering = event;
@@ -45,7 +60,7 @@ export class ScanComponent {
         }
 
         // The storage path
-        const path = `${this.book}_ch${this.chapter}_p${this.page}`;
+        const path = `${this.bookmark.book}_ch${this.bookmark.chapter}_p${this.bookmark.page}`;
 
         // Totally optional metadata
         const customMetadata = { Date: `scans/${new Date().getTime()}` };
@@ -59,10 +74,30 @@ export class ScanComponent {
             tap(snap => {
                 console.log(snap);
                 if (snap.bytesTransferred === snap.totalBytes) {
-                    this.page++;
+                    this.bookmark.page++;
+                    this.setBookmark();
                 }
             })
         );
+    }
+
+    private async getBookmark() {
+        const savedBookmark = await this.afs.doc<Bookmark>('settings/bookmark').valueChanges().pipe(first()).toPromise();
+        console.log(savedBookmark);
+        return this.bookmark = savedBookmark;
+    }
+
+    public setBookmark() {
+        return this.afs.doc<Bookmark>('settings/bookmark').set(this.bookmark);
+    }
+
+    public clearBookmark() {
+        this.bookmark = {
+            book: '',
+            chapter: 1,
+            page: 1,
+        };
+        return this.afs.doc<Bookmark>('settings/bookmark').set(this.bookmark);
     }
 }
 

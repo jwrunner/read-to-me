@@ -1,18 +1,21 @@
 <mat-form-field class="mr-1" style="width: 300px;">
-  <input matInput placeholder="Enter book title" [(ngModel)]="book" type="text">
+  <input matInput placeholder="Enter book title" [(ngModel)]="bookmark.book" type="text">
 </mat-form-field>
 
 <mat-form-field class="mr-1" style="width: 80px;">
-  <input matInput placeholder="Ch/Section" [(ngModel)]="chapter" type="number">
+  <input matInput placeholder="Ch/Section" [(ngModel)]="bookmark.chapter" type="number">
 </mat-form-field>
 
 <mat-form-field style="width: 60px;">
-  <input matInput placeholder="Page" [(ngModel)]="page" type="number">
+  <input matInput placeholder="Page" [(ngModel)]="bookmark.page" type="number">
 </mat-form-field>
+
+<button mat-button (click)="setBookmark()" *ngIf="bookmark.book && bookmark.chapter && bookmark.page">Bookmark</button>
+<button mat-button (click)="clearBookmark()" *ngIf="bookmark.book">Clear</button>
 
 
 <div class="dropzone" appDropZone (hovered)="toggleHover($event)" (dropped)="startUpload($event)" [class.hovering]="isHovering"
-  *ngIf="book && chapter && page">
+  *ngIf="bookmark.book && bookmark.chapter && bookmark.page">
 
   <h3>Drag and Drop an Image</h3>
   <label class="file-label">

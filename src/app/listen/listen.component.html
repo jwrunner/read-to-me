@@ -1,5 +1,22 @@
-<div *ngFor="let page of pages$ | async">
-  <h3>{{ page.pageName }}</h3>
-  <audio *ngIf="page.audioPath" controls="true" [src]="page.audioPath"></audio>
-  <p>{{ page.text }}</p>
-</div>
+<mat-accordion>
+  <mat-expansion-panel [expanded]="step === i" (opened)="setStep(i)" hideToggle *ngFor="let page of pages$ | async; let i = index; let last = last; let first = first">
+    <mat-expansion-panel-header>
+      <h4>
+        {{ page.pageName }}
+      </h4>
+      <button style="margin-left: auto;" mat-button (click)="delete(page.id, page.pageName)">Delete</button>
+    </mat-expansion-panel-header>
+
+    <div *ngIf="step === i">
+      <audio id="page{{i}}" *ngIf="page.audioPath" controls="true" [src]="page.audioPath" (ended)="audioEnded(i)"
+        autoplay></audio>
+    </div>
+    <br />
+    {{ page.text }}
+
+    <mat-action-row>
+      <button mat-button (click)="prevStep()" *ngIf="!first">Previous</button>
+      <button mat-button color="primary" (click)="nextStep()" *ngIf="!last">Next</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
