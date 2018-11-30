@@ -22,6 +22,7 @@ import { AppComponent } from './app.component';
 import { ListenComponent } from './listen/listen.component';
 import { ScanComponent } from './scan/scan.component';
 import { HeaderComponent } from './header/header.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
     declarations: [
@@ -37,7 +38,7 @@ import { HeaderComponent } from './header/header.component';
         BrowserAnimationsModule,
         AppRoutingModule,
         AngularFireModule.initializeApp(firebaseConfig),
-        AngularFirestoreModule,
+        AngularFirestoreModule.enablePersistence(),
         AngularFireAuthModule,
         AngularFireStorageModule,
         FormsModule,
@@ -46,6 +47,7 @@ import { HeaderComponent } from './header/header.component';
         MatFormFieldModule,
         MatInputModule,
         MatExpansionModule,
+        ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     ],
     providers: [],
     bootstrap: [AppComponent]
