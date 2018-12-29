@@ -7,7 +7,7 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
   },
-  { path: 'books', loadChildren: './books/books.module#BooksModule' },
+  { path: 'book', loadChildren: './book/book.module#BookModule' },
 ];
 
 @NgModule({

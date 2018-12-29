@@ -4,9 +4,9 @@ import { Book } from 'src/app/_types/book.interface';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'rtm-books-home',
-  templateUrl: './books-home.component.html',
-  styleUrls: ['./books-home.component.scss']
+  selector: 'rtm-book-home',
+  templateUrl: './book-home.component.html',
+  styleUrls: ['./book-home.component.scss']
 })
 export class BooksHomeComponent implements OnInit {
 

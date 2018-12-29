@@ -39,7 +39,7 @@ export class AddBookComponent implements OnInit {
       };
 
       const docRef = await this.afs.collection('books').add(bookData);
-      this.router.navigate([`/books/${docRef.id}`]);
+      this.router.navigate([`/book/${docRef.id}`]);
     }
   }
 

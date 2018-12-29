@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { BooksRoutingModule } from './books-routing.module';
-import { BooksHomeComponent } from './books-home/books-home.component';
+import { BookRoutingModule } from './book-routing.module';
+import { BooksHomeComponent } from './book-home/book-home.component';
 import { BookService } from './_services/book.service';
 // import { ScanComponent } from './scan/scan.component';
 
@@ -15,7 +15,7 @@ import { BookService } from './_services/book.service';
   ],
   imports: [
     CommonModule,
-    BooksRoutingModule,
+    BookRoutingModule,
     // AngularFireStorageModule,
     // AngularFirestoreModule,
     // FormsModule,
@@ -30,4 +30,4 @@ import { BookService } from './_services/book.service';
     BookService,
   ]
 })
-export class BooksModule { }
+export class BookModule { }
