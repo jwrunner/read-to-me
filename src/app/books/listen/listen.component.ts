@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { AngularFireStorage } from 'angularfire2/storage';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { map } from 'rxjs/operators';
 
 export interface Page {
@@ -11,7 +11,7 @@ export interface Page {
 }
 
 @Component({
-    selector: 'app-listen',
+    selector: 'rtm-listen',
     templateUrl: './listen.component.html',
     styleUrls: ['./listen.component.scss']
 })
@@ -32,17 +32,17 @@ export class ListenComponent implements OnInit {
 
     private getPages() {
         this.pages$ = this.afs.collection<Page>('pages', ref => ref.orderBy('pageName')).snapshotChanges()
-        .pipe(
-            map(arr => {
-                return arr.map(snap => {
-                    const data = snap.payload.doc.data() as Page;
-                    const id = snap.payload.doc.id;
-                    return {
-                        id, ...data
-                    };
-                });
-            })
-        );
+            .pipe(
+                map(arr => {
+                    return arr.map(snap => {
+                        const data = snap.payload.doc.data() as Page;
+                        const id = snap.payload.doc.id;
+                        return {
+                            id, ...data
+                        };
+                    });
+                })
+            );
     }
 
     public setStep(index: number) {

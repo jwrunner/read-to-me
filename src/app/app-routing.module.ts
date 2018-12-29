@@ -1,16 +1,17 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ListenComponent } from './listen/listen.component';
-import { ScanComponent } from './scan/scan.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'scan', pathMatch: 'full' },
-  { path: 'scan', pathMatch: 'full', component: ScanComponent },
-  { path: 'listen', pathMatch: 'full', component: ListenComponent },
+  {
+    path: '',
+    component: HomeComponent,
+  },
+  { path: 'books', loadChildren: './books/books.module#BooksModule' },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { paramsInheritanceStrategy: 'always' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

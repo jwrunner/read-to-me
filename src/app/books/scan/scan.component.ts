@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
+import { AngularFireUploadTask, AngularFireStorage } from '@angular/fire/storage';
+import { AngularFirestore } from '@angular/fire/firestore';
+
 import { Observable } from 'rxjs';
 import { tap, first } from 'rxjs/operators';
-import { AngularFirestore } from 'angularfire2/firestore';
 
 export interface Bookmark {
     book: string;
@@ -11,7 +12,7 @@ export interface Bookmark {
 }
 
 @Component({
-    selector: 'app-scan',
+    selector: 'rtm-scan',
     templateUrl: './scan.component.html',
     styleUrls: ['./scan.component.scss']
 })

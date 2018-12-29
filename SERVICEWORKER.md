@@ -2,7 +2,7 @@
 Service worker automatically gets added for production builds
 
 ## Setup History
-Consulted Angular Service Worker docs and https://dzone.com/articles/developing-pwa-using-angular-7 for initial setup.
+Consulted [Angular Service Worker docs](https://angular.io/guide/service-worker-getting-started) and https://dzone.com/articles/developing-pwa-using-angular-7 for initial setup.
 
 ## To Test the Service Worker
 1. `ng build --prod`

@@ -1,0 +1,8 @@
+<ng-container *ngIf="book | async as book">
+ 
+  <p>
+    BOOK id: {{ book.id }}
+  </p>
+  
+  <pre>{{ book | json }}</pre>
+</ng-container>

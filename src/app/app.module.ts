@@ -1,52 +1,42 @@
-import { BrowserModule } from '@angular/platform-browser';
+// Angular
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-
-// Material
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatToolbarModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatExpansionModule } from '@angular/material';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
-import { AngularFireModule } from '@angular/fire';
-import { AngularFirestoreModule } from 'angularfire2/firestore';
-import { AngularFireStorageModule } from 'angularfire2/storage';
-import { AngularFireAuthModule } from 'angularfire2/auth';
-
+// App
 import { environment } from '../environments/environment';
 export const firebaseConfig = environment.firebaseConfig;
-
 import { AppRoutingModule } from './app-routing.module';
-import { DropZoneDirective } from './scan/drop-zone.directive';
-
-// Components
 import { AppComponent } from './app.component';
-import { ListenComponent } from './listen/listen.component';
-import { ScanComponent } from './scan/scan.component';
+import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
-import { ServiceWorkerModule } from '@angular/service-worker';
+import { MatButtonModule, MatMenuModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+import { CoreModule } from './core/core.module';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { FormsModule } from '@angular/forms';
+import { BookCardComponent } from './home/book-card/book-card.component';
+import { AddBookComponent } from './home/add-book/add-book.component';
 
 @NgModule({
     declarations: [
         AppComponent,
-        ScanComponent,
-        DropZoneDirective,
-        ListenComponent,
-        ScanComponent,
+        HomeComponent,
         HeaderComponent,
+        BookCardComponent,
+        AddBookComponent,
     ],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
         AppRoutingModule,
         AngularFireModule.initializeApp(firebaseConfig),
-        AngularFirestoreModule.enablePersistence(),
-        AngularFireAuthModule,
-        AngularFireStorageModule,
+        AngularFirestoreModule.enablePersistence({ experimentalTabSynchronization: true }),
+        CoreModule,
         FormsModule,
-        MatToolbarModule,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatExpansionModule,
+        MatFormFieldModule, MatInputModule,
+        MatButtonModule, MatMenuModule,
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     ],
     providers: [],

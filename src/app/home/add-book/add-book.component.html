@@ -1,0 +1,15 @@
+<div class="my-2 d-flex">
+  <mat-form-field style="flex-grow: 1;">
+    <input matInput placeholder="Enter book title" [(ngModel)]="bookTitle" type="text" autocomplete="off" autocorrect="off"
+      spellcheck="false" autofocus>
+  </mat-form-field>
+
+  <div style="margin: 8px 0 0 6px;">
+    <button (click)="addBook()" mat-raised-button color="accent" [disabled]="!bookTitle">
+      <span *ngIf="!addingBook else adding">
+        Add
+      </span>
+      <ng-template #adding>Adding...</ng-template>
+    </button>
+  </div>
+</div>

@@ -1,15 +1,20 @@
 {
-  "name": "read-to-me",
+  "name": "read-books-to-me",
   "version": "0.0.1",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --open",
+    "start": "ng serve --open --port 3100",
     "build": "ng build --prod",
-    "build:aot": "ng build --aot",
-    "deploy": "firebase deploy --only hosting",
+    "build:dev": "ng build --aot",
+    "deploy": "firebase deploy --only hosting -P production",
+    "deploy:dev": "firebase deploy --only hosting -P default",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build:analyzer": "ng build --prod --stats-json",
+    "analyzer": "webpack-bundle-analyzer dist/stats.json",
+    "build:sourcemaps": "ng build --prod --source-map",
+    "sourcemap-explorer": "source-map-explorer dist/main.b200768816d49122cbbd.js"
   },
   "private": true,
   "dependencies": {
@@ -18,6 +23,7 @@
     "@angular/common": "^7.1.0",
     "@angular/compiler": "^7.1.0",
     "@angular/core": "^7.1.0",
+    "@angular/fire": "^5.1.1",
     "@angular/forms": "^7.1.0",
     "@angular/http": "^7.1.0",
     "@angular/material": "^7.1.0",
@@ -26,9 +32,9 @@
     "@angular/pwa": "^0.11.0",
     "@angular/router": "^7.1.0",
     "@angular/service-worker": "^7.1.0",
-    "angularfire2": "^5.0.1",
+    "@sentry/browser": "^4.4.1",
     "core-js": "^2.5.4",
-    "firebase": "^5.5.0",
+    "firebase": "^5.5.8",
     "hammerjs": "^2.0.8",
     "rxjs": "^6.3.3",
     "tslib": "^1.9.0",
@@ -43,6 +49,7 @@
     "codelyzer": "~4.5.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
-    "typescript": "~3.1.6"
+    "typescript": "~3.1.6",
+    "webpack-bundle-analyzer": "^3.0.3"
   }
 }

@@ -1,15 +1,21 @@
-<mat-toolbar color="primary">
-  <a mat-button routerLink="/" class="p-0 mr-auto">
-    <h2>Read to Me</h2>
+<div class="rtm-header d-flex">
+  <a mat-button routerLink="/" class="px-2 mr-auto">
+    <h3 class="m-0">Read to Me</h3>
   </a>
 
-  <a mat-button routerLinkActive="active" routerLink="scan" class="mr-1">Scan</a>
-  <a mat-button routerLinkActive="active" routerLink="listen">Listen</a>
-
-
-  <!-- <a mat-button routerLink="/user" *ngIf="auth.user | async as user; else login">
+  <button mat-button [matMenuTriggerFor]="usermenu" *ngIf="auth.user | async as user">
     <span [ngClass]="{'hidden-xs-down' : user.photoURL}">
-      {{ user.displayName | firstname }}
+      {{showFirstName(user.displayName)}}
+    </span>
+    <img *ngIf="user.photoURL" class="profile" [src]="user.photoURL">
+  </button>
+  <mat-menu #usermenu="matMenu" xPosition="before">
+    <button mat-menu-item (click)="auth.signOut()">Log Out</button>
+  </mat-menu>
+
+  <!-- <a mat-button routerLink="/user" *ngIf="auth.user | async as user">
+    <span [ngClass]="{'hidden-xs-down' : user.photoURL}">
+      {{showFirstName(user.displayName)}}
     </span>
     <img *ngIf="user.photoURL" class="profile" [src]="user.photoURL">
   </a> -->
@@ -20,4 +26,4 @@
       Log In
     </a>
   </ng-template> -->
-</mat-toolbar>
+</div>
