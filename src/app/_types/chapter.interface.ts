@@ -1,11 +1,9 @@
-export interface Book {
-    id?: string;
-    title: string;
+export interface Chapter {
+    id: string; // Prologue, 1, 2, 3, Epilogue, etc...
+    title?: string;
     ownerId: string;
     ownerName: string;
     dateCreated: any; // FieldValue; // import { FieldValue } from '@google-cloud/firestore';
     pages: number;
-    author?: string;
-    publicationYear?: number;
     // estimatedMinutes: number;
 }

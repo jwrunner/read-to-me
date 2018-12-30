@@ -1,47 +1,36 @@
 import { Injectable } from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable, of, BehaviorSubject } from 'rxjs';
-import { filter, mapTo, map, switchMap, first } from 'rxjs/operators';
-import { assign } from 'lodash';
+import { of, BehaviorSubject } from 'rxjs';
+import { switchMap, first } from 'rxjs/operators';
 
+import { RouterHelperService } from './router-helper.service';
 import { Book } from 'src/app/_types/book.interface';
+import { Chapter } from 'src/app/_types/chapter.interface';
 
 @Injectable()
 export class BookService {
-    blah = 'deleteThis';
 
     bookId: string;
     private _book = new BehaviorSubject<Book>({ id: '...', title: '', ownerId: null, ownerName: '', dateCreated: null, pages: 0 });
     currentBook = this._book.asObservable();
 
+    chapterId: string;
+    private _chapter = new BehaviorSubject<Chapter>({ id: '', ownerId: null, ownerName: null, dateCreated: null, pages: 0 });
+    currentChapter = this._chapter.asObservable();
+
     constructor(
-        private rootRouter: Router,
-        private activatedRoute: ActivatedRoute,
         private afs: AngularFirestore,
+        private routerHelper: RouterHelperService,
     ) {
         this.watchBookId();
+        this.watchChapterId();
     }
 
     private watchBookId() {
-        this.rootRouter.events.pipe(
-            filter(event => event instanceof NavigationEnd),
-            mapTo(this.activatedRoute),
-            map(route => {
-                console.log('route event caught');
-                const allParams = {};
-                while (route.firstChild) {
-                    route = route.firstChild;
-                    assign(allParams, route.snapshot.params);
-                }
-                return allParams['bookId'];
-                // return allParams;
-            })
-        ).pipe(
+        this.routerHelper.bookId.pipe(
             switchMap(bookId => {
                 if (bookId) {
                     this.bookId = bookId;
-                    console.log(`swithmapped to bookId: ${bookId}`);
                     return this.afs.doc<Book>(`books/${bookId}`).valueChanges();
                 } else {
                     return of(null);
@@ -50,15 +39,34 @@ export class BookService {
         ).subscribe(book => {
             if (book) {
                 book.id = this.bookId;
+                this._book.next(book);
             }
-            console.table(book);
-            this._book.next(book);
-            // const bookId = allParams['bookId'];
-            // const chapter = allParams['chapter'];
         });
     }
 
-    // getBook(): Promise<Book> {
-    //     return this.book.pipe(first()).toPromise();
-    // }
+    private watchChapterId() {
+        this.routerHelper.chapterId.pipe(
+            switchMap(chapterId => {
+                if (chapterId) {
+                    this.chapterId = chapterId;
+                    return this.afs.doc<Chapter>(`books/${this.bookId}/chapters/${chapterId}`).valueChanges();
+                } else {
+                    return of(null);
+                }
+            })
+        ).subscribe(chapter => {
+            if (chapter) {
+                this._chapter.next(chapter);
+            }
+        });
+    }
+
+    getBook(): Promise<Book> {
+        return this.currentBook.pipe(first()).toPromise();
+    }
+
+    getChapter(): Promise<Chapter> {
+        return this.currentChapter.pipe(first()).toPromise();
+    }
+
 }

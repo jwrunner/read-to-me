@@ -1,9 +1,10 @@
 <div class="rtm-header d-flex">
-  <a mat-button routerLink="/" class="px-2 mr-auto">
-    <h3 class="m-0">Read to Me</h3>
+  <a mat-button routerLink="/" class="px-2">
+    <h3 class="m-0" *ngIf="showingHome else backArrow">Read To Me</h3>
+    <ng-template #backArrow>RTM</ng-template>
   </a>
 
-  <button mat-button [matMenuTriggerFor]="usermenu" *ngIf="auth.user | async as user">
+  <button class="ml-auto" mat-button [matMenuTriggerFor]="usermenu" *ngIf="auth.user | async as user">
     <span [ngClass]="{'hidden-xs-down' : user.photoURL}">
       {{showFirstName(user.displayName)}}
     </span>

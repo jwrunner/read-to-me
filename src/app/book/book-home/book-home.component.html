@@ -1,8 +1,9 @@
-<ng-container *ngIf="book | async as book">
- 
-  <p>
-    BOOK id: {{ book.id }}
-  </p>
+<ng-container *ngIf="bookService.currentBook | async as book">
+  <div class="book-title-container">
+    <a mat-button routerLink="/book/{{book.id}}" class="px-2" style="max-width: 100%" title="{{ book | json }}">
+      <h3 class="m-0 truncate">{{book.title}}</h3>
+    </a>
+  </div>
   
-  <pre>{{ book | json }}</pre>
+  <router-outlet></router-outlet>
 </ng-container>

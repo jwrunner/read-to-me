@@ -7,9 +7,9 @@
         </div>
 
         <h3 *ngIf="books.length">My Books</h3>
-        <div class="d-flex flex-column book-column px-2">
+        <div class="d-flex flex-column centered-400-column px-2">
+          <rtm-book-card class="mb-2" style="display: block" *ngFor="let book of books" [book]="book"></rtm-book-card>
 
-          <rtm-book-card class="mb-2" *ngFor="let book of books" [book]="book"></rtm-book-card>
           <button mat-raised-button color="accent" (click)="addBook = true"
             *ngIf="!addBook && books.length && books.length < 11" class="my-3">Add Book</button>
             <div class="my-3" *ngIf="books.length >= 11">
