@@ -1,3 +1,18 @@
-<p>
-  chapter-home works!
-</p>
+<div class="px-2 pb-2" *ngIf="bookService.currentChapter | async as chapter">
+  <h3 class="text-center">{{prefixIfNumber(chapter.id)}}</h3>
+
+  <div class="chapter-layout">
+    <div class="d-flex flex-column text-center">
+      <div>Listen to:</div>
+      <button mat-button type="button" (click)="play(1)">Page 1</button>
+      <button mat-button type="button" (click)="play(2)">Page 2</button>
+      <button mat-button type="button" (click)="play(2)">Page 2</button>
+      <button mat-button type="button" (click)="play(2)">Page 2</button>
+      <button mat-button type="button" (click)="play(2)">Page 2</button>
+    </div>
+
+    <rtm-scan></rtm-scan>
+  </div>
+
+  <div class="small text-muted mt-3 text-center">Tip: Tap the book title to return to the chapter list for this book.</div>
+</div>

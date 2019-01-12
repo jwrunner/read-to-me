@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireUploadTask, AngularFireStorage } from '@angular/fire/storage';
-import { AngularFirestore } from '@angular/fire/firestore';
+// import { AngularFirestore } from '@angular/fire/firestore';
 
 import { Observable } from 'rxjs';
-import { tap, first } from 'rxjs/operators';
-
-export interface Bookmark {
-    book: string;
-    chapter: number;
-    page: number;
-}
+// import { tap } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material';
+import { BookService } from '../_services/book.service';
+import { AuthService } from 'src/app/core/auth.service';
 
 @Component({
     selector: 'rtm-scan',
@@ -17,33 +14,27 @@ export interface Bookmark {
     styleUrls: ['./scan.component.scss']
 })
 export class ScanComponent implements OnInit {
-    bookmark: Bookmark = {
-        book: '',
-        chapter: 1,
-        page: 1,
-    };
+    page = 1;
 
-    // Main task
+    isHovering: boolean;
+    isUploading = false;
+
     task: AngularFireUploadTask;
-
-    // Progress monitoring
     percentage: Observable<number>;
-
-    snapshot: Observable<any>;
-
-    // Download URL
     downloadURL: Observable<string>;
 
-    // State for dropzone CSS toggling
-    isHovering: boolean;
 
     constructor(
-        private afs: AngularFirestore,
+        // private afs: AngularFirestore,
         private storage: AngularFireStorage,
+        private snackBar: MatSnackBar,
+        private bookService: BookService,
+        private auth: AuthService,
     ) { }
 
     ngOnInit() {
-        this.getBookmark();
+        // this.getBookmark();
+        // TODO: get last page scanned in this book (save as value on book doc)
     }
 
     toggleHover(event: boolean) {
@@ -51,54 +42,65 @@ export class ScanComponent implements OnInit {
     }
 
 
-    startUpload(event: FileList) {
-        const file = event.item(0);
-
-        // Client-side validation for images
-        if (file.type.split('/')[0] !== 'image') {
-            console.error('unsupported file type :( ');
-            return;
+    async startUpload(event: FileList) {
+        if (this.isUploading) {
+            return this.snackBar.open('Please wait for current image to finish uploading.', '', { duration: 3000 });
         }
 
-        // The storage path
-        const path = `${this.bookmark.book}_ch${this.bookmark.chapter}_p${this.bookmark.page}`;
+        const file = event.item(0);
 
-        // Totally optional metadata
-        const customMetadata = { Date: `scans/${new Date().getTime()}` };
+        if (file.type.split('/')[0] !== 'image') {
+            return this.snackBar.open('Unsupported File Type', 'Dismiss', { duration: 6000, panelClass: 'snackbar-error' });
+        }
 
-        // The main task
+        // Must be smaller than 20MB, http://www.unitconversion.org/data-storage/megabytes-to-bytes-conversion.html
+        if (file.size > 20971520) {
+            return this.snackBar.open('Images must be smaller than 20MB', 'Dismiss', { duration: 6000, panelClass: 'snackbar-error' });
+        }
+
+        this.isUploading = true;
+
+        const book = await this.bookService.getBook();
+        const chapter = await this.bookService.getChapter();
+        const path = `scans/BK_${book.id}_CH_${chapter.id}_PG_${this.page}_${new Date().getTime()}`;
+
+        const { uid } = await this.auth.getUser();
+        const customMetadata = { uid: uid };
+
         this.task = this.storage.upload(path, file, { customMetadata });
-
-        // Progress monitoring
         this.percentage = this.task.percentageChanges();
-        this.snapshot = this.task.snapshotChanges().pipe(
-            tap(snap => {
-                console.log(snap);
-                if (snap.bytesTransferred === snap.totalBytes) {
-                    this.bookmark.page++;
-                    this.setBookmark();
-                }
-            })
-        );
+
+        this.task.then(snap => {
+            if (snap.state === 'success') {
+                // tslint:disable-next-line:max-line-length
+                this.snackBar.open(`Page ${this.page} uploaded. Wait a moment for the scanned page to show up or continue to scan the next page.`, 'Dismiss', { duration: 8000 });
+                this.page++;
+                this.isUploading = false;
+            }
+        }).catch(() => {
+            this.snackBar.open('Image Upload Failed', 'Dismiss', { duration: 10000, panelClass: 'snackbar-error' });
+            this.isUploading = false;
+        });
     }
 
-    private async getBookmark() {
-        const savedBookmark = await this.afs.doc<Bookmark>('settings/bookmark').valueChanges().pipe(first()).toPromise();
-        console.log(savedBookmark);
-        return this.bookmark = savedBookmark;
-    }
+    // TODO convert this to look at latest page uploaded to chapter
+    // private async getBookmark() {
+    //     const savedBookmark = await this.afs.doc<Bookmark>('settings/bookmark').valueChanges().pipe(first()).toPromise();
+    //     console.log(savedBookmark);
+    //     return this.bookmark = savedBookmark;
+    // }
 
-    public setBookmark() {
-        return this.afs.doc<Bookmark>('settings/bookmark').set(this.bookmark);
-    }
+    // public setBookmark() {
+    //     return this.afs.doc<Bookmark>('settings/bookmark').set(this.bookmark);
+    // }
 
-    public clearBookmark() {
-        this.bookmark = {
-            book: '',
-            chapter: 1,
-            page: 1,
-        };
-        return this.afs.doc<Bookmark>('settings/bookmark').set(this.bookmark);
-    }
+    // public clearBookmark() {
+    //     this.bookmark = {
+    //         book: '',
+    //         chapter: 1,
+    //         page: 1,
+    //     };
+    //     return this.afs.doc<Bookmark>('settings/bookmark').set(this.bookmark);
+    // }
 }
 

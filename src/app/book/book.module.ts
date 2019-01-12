@@ -1,17 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { MatButtonModule, MatFormFieldModule, MatInputModule, MatSnackBarModule, MatProgressBarModule } from '@angular/material';
 
 import { BookRoutingModule } from './book-routing.module';
-import { BooksHomeComponent } from './book-home/book-home.component';
 import { BookService } from './_services/book.service';
+import { RouterHelperService } from './_services/router-helper.service';
+
+import { BooksHomeComponent } from './book-home/book-home.component';
 import { ChaptersListComponent } from './chapters-list/chapters-list.component';
-import { MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { AddChapterComponent } from './add-chapter/add-chapter.component';
 import { ChapterCardComponent } from './chapter-card/chapter-card.component';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { FormsModule } from '@angular/forms';
 import { ChapterHomeComponent } from './chapter-home/chapter-home.component';
-import { RouterHelperService } from './_services/router-helper.service';
+
+import { ScanComponent } from './scan/scan.component';
+import { DropZoneDirective } from './scan/drop-zone.directive';
 
 @NgModule({
   declarations: [
@@ -20,20 +25,20 @@ import { RouterHelperService } from './_services/router-helper.service';
     AddChapterComponent,
     ChapterCardComponent,
     ChapterHomeComponent,
-    // DropZoneDirective,
-    // ListenComponent,
-    // ScanComponent,
+    DropZoneDirective,
+    ScanComponent,
   ],
   imports: [
     CommonModule,
     BookRoutingModule,
-    // AngularFireStorageModule,
+    AngularFireStorageModule,
     AngularFirestoreModule,
     FormsModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    // MatExpansionModule,
+    MatSnackBarModule,
+    MatProgressBarModule,
   ],
   providers: [
     BookService,
