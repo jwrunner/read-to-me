@@ -2,5 +2,5 @@
   <div class="truncate">
     {{chapter.id}}
   </div>
-  <div class="small text-muted" *ngIf="chapter.pages">{{chapter.pages}} pages scanned</div>
+  <div class="small text-muted" *ngIf="chapter.pages">{{chapter.pages}} {{chapter.pages === 1 ? 'page' : 'pages'}} scanned</div>
 </div>

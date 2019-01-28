@@ -8,4 +8,5 @@ export interface Book {
     author?: string;
     publicationYear?: number;
     // estimatedMinutes: number;
+    listened?: boolean;
 }

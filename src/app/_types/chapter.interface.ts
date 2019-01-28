@@ -6,4 +6,5 @@ export interface Chapter {
     dateCreated: any; // FieldValue; // import { FieldValue } from '@google-cloud/firestore';
     pages: number;
     // estimatedMinutes: number;
+    listened?: boolean;
 }

@@ -1,7 +1,7 @@
-<div class="dropzone px-2" rtmDropZone (hovered)="toggleHover($event)" (dropped)="startUpload($event)" [class.hovering]="isHovering"
+<div class="dropzone p-3" rtmDropZone (hovered)="toggleHover($event)" (dropped)="startUpload($event)" [class.hovering]="isHovering"
   *ngIf="page">
 
-  <h3>Drag and Drop an Image</h3>
+  <h3 class="mt-0">Drag and Drop an Image</h3>
   <mat-form-field style="width: 60px;">
     <input matInput placeholder="Page" [(ngModel)]="page" type="number">
   </mat-form-field>

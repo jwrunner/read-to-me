@@ -61,8 +61,9 @@ export class ScanComponent implements OnInit {
         this.isUploading = true;
 
         const book = await this.bookService.getBook();
+        // const bookTitle = book.title.replace(/[^a-z0-9+]+/gi, '_');
         const chapter = await this.bookService.getChapter();
-        const path = `scans/BK_${book.id}_CH_${chapter.id}_PG_${this.page}_${new Date().getTime()}`;
+        const path = `scans/BK${book.id}_CH${chapter.id}_PG${this.page}_${new Date().getTime()}`;
 
         const { uid } = await this.auth.getUser();
         const customMetadata = { uid: uid };

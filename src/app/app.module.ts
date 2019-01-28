@@ -1,5 +1,5 @@
 // Angular
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler, Injectable } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -18,6 +18,22 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
 import { BookCardComponent } from './home/book-card/book-card.component';
 import { AddBookComponent } from './home/add-book/add-book.component';
+
+
+import * as Sentry from '@sentry/browser';
+
+Sentry.init({
+  dsn: 'https://e983452f9c97438abf3426a607b5ead5@sentry.io/1380788'
+});
+
+@Injectable()
+export class SentryErrorHandler implements ErrorHandler {
+  constructor() {}
+  handleError(error) {
+    Sentry.captureException(error.originalError || error);
+    throw error;
+  }
+}
 
 @NgModule({
     declarations: [
@@ -39,7 +55,7 @@ import { AddBookComponent } from './home/add-book/add-book.component';
         MatButtonModule, MatMenuModule,
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     ],
-    providers: [],
+    providers: [{ provide: ErrorHandler, useClass: SentryErrorHandler }],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

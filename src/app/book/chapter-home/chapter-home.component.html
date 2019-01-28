@@ -1,17 +1,15 @@
 <div class="px-2 pb-2" *ngIf="bookService.currentChapter | async as chapter">
-  <h3 class="text-center">{{prefixIfNumber(chapter.id)}}</h3>
+  <h3 class="text-center">{{prefixIfNumber(chapter.id)}}, {{chapter.pages}} page{{chapter.pages === 1 ? '' : 's'}}</h3>
 
-  <div class="chapter-layout">
-    <div class="d-flex flex-column text-center">
+  <div class="d-flex flex-wrap" style="justify-content: space-around;">
+    <div class="d-flex flex-column text-center" *ngIf="chapter.pages">
       <div>Listen to:</div>
-      <button mat-button type="button" (click)="play(1)">Page 1</button>
-      <button mat-button type="button" (click)="play(2)">Page 2</button>
-      <button mat-button type="button" (click)="play(2)">Page 2</button>
-      <button mat-button type="button" (click)="play(2)">Page 2</button>
-      <button mat-button type="button" (click)="play(2)">Page 2</button>
+      <button *ngFor="let page of pages$ | async" mat-button type="button" (click)="play(page)">Page {{page.id}}</button>
     </div>
 
-    <rtm-scan></rtm-scan>
+    <div>
+      <rtm-scan></rtm-scan>
+    </div>
   </div>
 
   <div class="small text-muted mt-3 text-center">Tip: Tap the book title to return to the chapter list for this book.</div>

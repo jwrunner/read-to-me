@@ -8,125 +8,126 @@ admin.initializeApp({
     databaseURL: 'https://read-books-to-me.firebaseio.com'
 });
 
-// Cloud Storage
-import * as Storage from '@google-cloud/storage';
-const gcs = new Storage();
+const db = admin.firestore();
 
 import { tmpdir } from 'os';
 import { join, dirname } from 'path';
+
 import * as fs from 'fs';
 import * as fse from 'fs-extra';
 
-// Cloud Vision
+import * as Storage from '@google-cloud/storage';
+const gcs = new Storage();
+
 import * as vision from '@google-cloud/vision';
 const visionClient = new vision.ImageAnnotatorClient();
 
-// Cloud Text to Speech
 import * as textToSpeech from '@google-cloud/text-to-speech';
 const client = new textToSpeech.TextToSpeechClient();
 
+
+const writeFilePromise = (file, data, option) => {
+    return new Promise((resolve, reject) => {
+        fs.writeFile(file, data, option, error => {
+            if (error) reject(error);
+            resolve("File created! Time for the next step!");
+        });
+    });
+};
+
+async function increasePageCount(bookId: string, chapterId: string) {
+    try {
+        const book = await db.doc(`books/${bookId}`).get().then(doc => doc.data());
+        const increasedBkPageCount = book.pages + 1;
+        await db.doc(`books/${bookId}`).set({ pages: increasedBkPageCount }, { merge: true });
+
+        const chapter = await db.doc(`books/${bookId}/chapters/${chapterId}`).get().then(doc => doc.data());
+        const increasedChPageCount = chapter.pages + 1;
+        await db.doc(`books/${bookId}/chapters/${chapterId}`).set({ pages: increasedChPageCount }, { merge: true });
+    } catch (err) {
+        throw (err);
+    }
+}
 
 
 export const textExtraction = functions.storage
     .object()
     .onFinalize(async object => {
         if (!object.contentType.includes('image')) {
-            console.log('exiting function');
+            console.log('Not image: exiting function');
             return false;
         }
 
-        const fileBucket = object.bucket;
-        const filePath = object.name;
-        const pageName = filePath.split('/').pop();
-        const bucketDir = dirname(filePath);
+        try {
+            // Recognize FilePath
+            const fileBucket = object.bucket;
+            const filePath = object.name;
+            const pageName = filePath.split('/').pop();
+            const scansBucketDir = dirname(filePath);
+            const audioBucketDir = scansBucketDir.replace('scans', 'audio');
 
-        const imageUri = `gs://${fileBucket}/${filePath}`;
-        const docRef = admin.firestore().collection('pages');
+            // Text Extraction
+            const imageUri = `gs://${fileBucket}/${filePath}`;
+            const textRequest = await visionClient.documentTextDetection(imageUri);
+            const fullText = textRequest[0].textAnnotations[0];
+            const text = fullText ? fullText.description : null;
 
-        // Text Extraction
-        const textRequest = await visionClient.documentTextDetection(imageUri);
-        const fullText = textRequest[0].textAnnotations[0];
-        const text = fullText ? fullText.description : null;
+            // Construct the text-to-speech request
+            const request = {
+                input: { text: text },
+                // Select the language and SSML Voice Gender (optional)
+                voice: { languageCode: 'en-US', ssmlGender: 'NEUTRAL' },
+                // Select the type of audio encoding
+                audioConfig: { audioEncoding: 'MP3' },
+            };
+            console.log('Text-to-speech request:', request);
 
-        // Construct the text-to-speech request
-        const request = {
-            input: { text: text },
-            // Select the language and SSML Voice Gender (optional)
-            voice: { languageCode: 'en-US', ssmlGender: 'NEUTRAL' },
-            // Select the type of audio encoding
-            audioConfig: { audioEncoding: 'MP3' },
-        };
-        console.log('finished constructing the text-so-speech request:', request);
+            // Creat temp directory
+            const workingDir = join(tmpdir(), 'synthesized');
+            const tmpFilePath = join(workingDir, 'output.mp3');
 
-        // Creat temp directory
-        const workingDir = join(tmpdir(), 'synthesized');
-        const tmpFilePath = join(workingDir, 'output.mp3');
+            // Ensure temp directory exists
+            await fse.ensureDir(workingDir);
 
-        // Ensure temp directory exists
-        await fse.ensureDir(workingDir);
+            // Performs the Text-to-Speech request
+            const audioName = `${pageName}.mp3`;
+            let audioPath = 'notRetrieved';
 
-        // Turn fs.writeFile into a Promise
-        const writeFilePromise = (file, data, option) => {
-            return new Promise((resolve, reject) => {
-                fs.writeFile(file, data, option, error => {
-                    if (error) reject(error);
-                    resolve("File created! Time for the next step!");
-                });
-            });
-        };
-
-        // Performs the Text-to-Speech request
-        const audioName = `${pageName}.mp3`;
-        let audioPath = 'notRetrieved';
-
-        console.log('about to start the speech synthesizer');
-        await client.synthesizeSpeech(request)
-            .then(responses => {
-                const response = responses[0];
-                console.log('audio response: ', response.audioContent);
-                return writeFilePromise(tmpFilePath, response.audioContent, 'binary');
-            })
-            .then(() => {
-                return gcs.bucket(fileBucket).upload(tmpFilePath, {
-                    destination: join(bucketDir, audioName)
-                });
-            })
-            .then(() => {
-                console.log('audio uploaded successfully');
-                const updloadedAudioFile = gcs.bucket(fileBucket).file(audioName);
-                return updloadedAudioFile.getSignedUrl({
-                    action: 'read',
-                    expires: '03-09-2491'
-                }).then(signedUrls => {
-                    audioPath = signedUrls[0];
-                    console.log('audioPath is: ', signedUrls[0]);
-                });
-            })
-            .catch(error => {
-                console.error('Synthesize speech + write + upload error:', error);
+            const responses = await client.synthesizeSpeech(request)
+            const response = responses[0];
+            await writeFilePromise(tmpFilePath, response.audioContent, 'binary');
+            await gcs.bucket(fileBucket).upload(tmpFilePath, {
+                destination: join(audioBucketDir, audioName)
             });
 
-        console.log('about to save data to Firestore');
-        // Save Text to Firestore
-        const date = new Date().getTime();
-        const pageData = { text, pageName, date, audioPath }
-        docRef.add(pageData)
-            .then(() => {
-                // Delete image
-                gcs.bucket(fileBucket)
-                    .file(pageName)
-                    .delete()
-                    .then(() => {
-                        console.log(`gs://${fileBucket}/${pageName} deleted.`);
-                    })
-                    .catch(err => {
-                        console.error('Delete image ERROR:', err);
-                    });
-            }).catch((err) => {
-                console.log(err);
+            const updloadedAudioFile = gcs.bucket(fileBucket).file(`audio/${audioName}`);
+            const signedUrls = await updloadedAudioFile.getSignedUrl({
+                action: 'read',
+                expires: '03-09-2491'
             })
+            // TODO, speed up by using UUID method as done in Firestore-Importer script for TD images
+            audioPath = signedUrls[0];
 
-        // Clean up temp directory
-        // return fse.remove(workingDir);
+            // Save Text to Firestore
+            const bookId = pageName.match(/^BK(.+)_CH/)[1];
+            const chapterId = pageName.match(/_CH(.+)_PG/)[1];
+            const page = pageName.match(/_PG(.+)_/)[1];
+
+            const date = new Date().getTime();
+            const pageData = { text, bookId, chapterId, id: page, date, audioPath }
+
+            const docRef = db.doc(`books/${bookId}/chapters/${chapterId}/pages/${page}`);
+            await docRef.set(pageData)
+
+            await increasePageCount(bookId, chapterId);
+
+            await gcs.bucket(fileBucket).file(`scans/${pageName}`).delete()
+
+            // Clean up temp directory
+            // return fse.remove(workingDir);
+        } catch (err) {
+            console.log(err);
+        }
         return null;
     });
+

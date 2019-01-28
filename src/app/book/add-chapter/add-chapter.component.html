@@ -1,7 +1,7 @@
 <div class="d-flex mb-2">
   <mat-form-field style="flex-grow: 1;">
     <input matInput placeholder="Chapter Number" [(ngModel)]="chapterId" type="text" autocomplete="off" autocorrect="off"
-      spellcheck="false" autofocus>
+      spellcheck="false" autofocus (keyup.enter)="addChapter()">
       <mat-hint>1, 2, 3, Forward, Epilogue, etc...</mat-hint>
     </mat-form-field>
     

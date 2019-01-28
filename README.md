@@ -31,10 +31,3 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Split Firebase into Lazy-loaded module
 Main.js size before: 1.12 MB
-
-## Next
-Get page scanning working and adding to chapter.
-Then get page-wide bottom play bar working with service and query params
-
-## To Consider
-Say Chapters/Sections instead of just Chapters?
