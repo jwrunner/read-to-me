@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { of, BehaviorSubject } from 'rxjs';
 import { switchMap, first } from 'rxjs/operators';
 
-import { RouterHelperService } from './router-helper.service';
+import { RouterHelperService } from '../../_services/router-helper.service';
 import { Book } from 'src/app/_types/book.interface';
 import { Chapter } from 'src/app/_types/chapter.interface';
 

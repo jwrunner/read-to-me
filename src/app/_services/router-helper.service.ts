@@ -1,3 +1,4 @@
+// tslint:disable:max-line-length
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -17,10 +18,11 @@ export class RouterParams {
 
 @Injectable()
 export class RouterHelperService {
+    // TODO: Ask David to explain routerParamsStatic
+    // private routerParamsStatic: RouterParams;
     private _routerParams: BehaviorSubject<RouterParams> = new BehaviorSubject<RouterParams>(new RouterParams({}));
     routerParams = this._routerParams.asObservable();
 
-    // tslint:disable:max-line-length
     bookId: Observable<string> = this._routerParams.pipe(pluck<RouterParams, string>('bookId'), filter(bookId => !!bookId), distinctUntilChanged());
     chapterId: Observable<string> = this._routerParams.pipe(pluck<RouterParams, string>('chapterId'), filter(chapterId => !!chapterId), distinctUntilChanged());
 
@@ -42,6 +44,7 @@ export class RouterHelperService {
         ).subscribe(allParams => {
             const params = new RouterParams(allParams);
             this._routerParams.next(params);
+            // this.routerParamsStatic = params;
         });
     }
 

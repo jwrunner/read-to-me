@@ -6,7 +6,7 @@ import { firestore } from 'firebase/app';
 import { Chapter } from 'src/app/_types/chapter.interface';
 import { take } from 'rxjs/operators';
 import { BookService } from '../_services/book.service';
-import { RouterHelperService } from '../_services/router-helper.service';
+import { RouterHelperService } from '../../_services/router-helper.service';
 
 @Component({
   selector: 'rtm-add-chapter',

@@ -7,7 +7,6 @@ import { MatButtonModule, MatFormFieldModule, MatInputModule, MatSnackBarModule,
 
 import { BookRoutingModule } from './book-routing.module';
 import { BookService } from './_services/book.service';
-import { RouterHelperService } from './_services/router-helper.service';
 
 import { BooksHomeComponent } from './book-home/book-home.component';
 import { ChaptersListComponent } from './chapters-list/chapters-list.component';
@@ -42,7 +41,6 @@ import { DropZoneDirective } from './scan/drop-zone.directive';
   ],
   providers: [
     BookService,
-    RouterHelperService,
   ]
 })
 export class BookModule { }

@@ -1,0 +1,14 @@
+@import '../../styles/titanium/dependencies';
+
+.audio-player {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: $rtm-primary;
+    color: white;
+}
+
+.white-link {
+    color: white;
+    text-decoration: none;
+}

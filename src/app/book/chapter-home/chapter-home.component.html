@@ -4,7 +4,7 @@
   <div class="d-flex flex-wrap" style="justify-content: space-around;">
     <div class="d-flex flex-column text-center" *ngIf="chapter.pages">
       <div>Listen to:</div>
-      <button *ngFor="let page of pages$ | async" mat-button type="button" (click)="play(page)">Page {{page.id}}</button>
+      <button *ngFor="let page of pages$ | async" mat-button type="button" (click)="setPage(page)" title="{{page | json}}">Page {{page.id}}</button>
     </div>
 
     <div>

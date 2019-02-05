@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Chapter } from 'src/app/_types/chapter.interface';
-import { RouterHelperService } from '../_services/router-helper.service';
+import { RouterHelperService } from '../../_services/router-helper.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { switchMap } from 'rxjs/operators';
 
