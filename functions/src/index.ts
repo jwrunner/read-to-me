@@ -15,6 +15,8 @@ import { join, dirname } from 'path';
 
 import * as fs from 'fs';
 import * as fse from 'fs-extra';
+// import * as UUID from 'uuidv4';
+const UUID = require('uuidv4');
 
 import * as Storage from '@google-cloud/storage';
 const gcs = new Storage();
@@ -96,17 +98,17 @@ export const textExtraction = functions.storage
             const responses = await client.synthesizeSpeech(request)
             const response = responses[0];
             await writeFilePromise(tmpFilePath, response.audioContent, 'binary');
-            await gcs.bucket(fileBucket).upload(tmpFilePath, {
-                destination: join(audioBucketDir, audioName)
-            });
 
-            const updloadedAudioFile = gcs.bucket(fileBucket).file(`audio/${audioName}`);
-            const signedUrls = await updloadedAudioFile.getSignedUrl({
-                action: 'read',
-                expires: '03-09-2491'
-            })
-            // TODO, speed up by using UUID method as done in Firestore-Importer script for TD images
-            audioPath = signedUrls[0];
+            const uuid = UUID();
+
+            await gcs.bucket(fileBucket).upload(tmpFilePath, {
+                destination: join(audioBucketDir, audioName),
+                metadata: {
+                    metadata: {
+                        firebaseStorageDownloadTokens: uuid
+                    }
+                }
+            });
 
             // Save Text to Firestore
             const bookId = pageName.match(/^BK(.+)_CH/)[1];
@@ -114,7 +116,7 @@ export const textExtraction = functions.storage
             const page = pageName.match(/_PG(.+)_/)[1];
 
             const date = new Date().getTime();
-            const pageData = { text, bookId, chapterId, id: page, date, audioPath }
+            const pageData = { text, bookId, chapterId, id: page, date, audioPath, mt: uuid }
 
             const docRef = db.doc(`books/${bookId}/chapters/${chapterId}/pages/${page}`);
             await docRef.set(pageData)

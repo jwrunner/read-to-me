@@ -16,12 +16,13 @@
     "@google-cloud/storage": "^1.7.0",
     "firebase-admin": "~6.0.0",
     "firebase-functions": "^2.0.3",
-    "fs-extra": "^7.0.0"
+    "fs-extra": "^7.0.0",
+    "uuidv4": "^2.0.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^5.0.4",
-    "tslint": "~5.8.0",
-    "typescript": "~2.8.3"
+    "tslint": "~5.12.1",
+    "typescript": "~3.3.1"
   },
   "private": true
 }
