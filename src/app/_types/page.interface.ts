@@ -5,4 +5,5 @@ export interface IPage {
     id: string;
     date: Date;
     audioPath: string;
+    mt: string;
 }

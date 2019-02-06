@@ -1,4 +1,4 @@
-<div class="audio-player d-flex py-2" style="align-items: center;" *ngIf="page?.id">
+<div class="audio-player d-flex py-2" style="align-items: center;" *ngIf="page?.id" [@fadeUpDownAnimation]>
   <button mat-button>
     <i class="fas fa-play-circle fa-2x" *ngIf="!playing"></i>
     <i class="fas fa-pause-circle fa-2x" *ngIf="playing"></i>

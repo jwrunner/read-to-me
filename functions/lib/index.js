@@ -21,6 +21,8 @@ const os_1 = require("os");
 const path_1 = require("path");
 const fs = require("fs");
 const fse = require("fs-extra");
+// import * as UUID from 'uuidv4';
+const UUID = require('uuidv4');
 const Storage = require("@google-cloud/storage");
 const gcs = new Storage();
 const vision = require("@google-cloud/vision");
@@ -86,26 +88,25 @@ exports.textExtraction = functions.storage
         yield fse.ensureDir(workingDir);
         // Performs the Text-to-Speech request
         const audioName = `${pageName}.mp3`;
-        let audioPath = 'notRetrieved';
         const responses = yield client.synthesizeSpeech(request);
         const response = responses[0];
         yield writeFilePromise(tmpFilePath, response.audioContent, 'binary');
+        const uuid = UUID();
         yield gcs.bucket(fileBucket).upload(tmpFilePath, {
-            destination: path_1.join(audioBucketDir, audioName)
+            destination: path_1.join(audioBucketDir, audioName),
+            metadata: {
+                metadata: {
+                    firebaseStorageDownloadTokens: uuid
+                }
+            }
         });
-        const updloadedAudioFile = gcs.bucket(fileBucket).file(`audio/${audioName}`);
-        const signedUrls = yield updloadedAudioFile.getSignedUrl({
-            action: 'read',
-            expires: '03-09-2491'
-        });
-        // TODO, speed up by using UUID method as done in Firestore-Importer script for TD images
-        audioPath = signedUrls[0];
         // Save Text to Firestore
         const bookId = pageName.match(/^BK(.+)_CH/)[1];
         const chapterId = pageName.match(/_CH(.+)_PG/)[1];
         const page = pageName.match(/_PG(.+)_/)[1];
-        const date = new Date().getTime();
-        const pageData = { text, bookId, chapterId, id: page, date, audioPath };
+        const audioPath = `audio/${audioName}`;
+        const date = new Date().getTime(); // TODO: Use Moment.js or Firebase
+        const pageData = { text, bookId, chapterId, id: page, date, audioPath, mt: uuid };
         const docRef = db.doc(`books/${bookId}/chapters/${chapterId}/pages/${page}`);
         yield docRef.set(pageData);
         yield increasePageCount(bookId, chapterId);

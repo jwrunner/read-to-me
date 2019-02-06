@@ -12,6 +12,7 @@ export class CurrentPage {
   date: Date;
   text: string;
   audioPath: string;
+  mt: string;
 
   constructor(pageData: any) {
     assign(this, pageData);

@@ -93,7 +93,6 @@ export const textExtraction = functions.storage
 
             // Performs the Text-to-Speech request
             const audioName = `${pageName}.mp3`;
-            let audioPath = 'notRetrieved';
 
             const responses = await client.synthesizeSpeech(request)
             const response = responses[0];
@@ -114,8 +113,8 @@ export const textExtraction = functions.storage
             const bookId = pageName.match(/^BK(.+)_CH/)[1];
             const chapterId = pageName.match(/_CH(.+)_PG/)[1];
             const page = pageName.match(/_PG(.+)_/)[1];
-
-            const date = new Date().getTime();
+            const audioPath = `audio/${audioName}`;
+            const date = new Date().getTime(); // TODO: Use Moment.js or Firebase
             const pageData = { text, bookId, chapterId, id: page, date, audioPath, mt: uuid }
 
             const docRef = db.doc(`books/${bookId}/chapters/${chapterId}/pages/${page}`);
