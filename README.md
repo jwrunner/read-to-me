@@ -1,9 +1,8 @@
 # Read 2 Me
 
-An simple web app built for the purpose of being able to listen to printed books.
+A simple web app built for the purpose of being able to listen to printed books.
 
-<p><a
-href="https://r2m.app">r2m.app</a>
+<p>
 <a href="https://angular.io/"><img src="https://img.shields.io/badge/Angular-7-blue.svg"></a>
 <a href="https://firebase.google.com/docs/web/setup"><img
 src="https://img.shields.io/badge/Firebase-5-red.svg"></a>

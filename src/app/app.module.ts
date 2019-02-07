@@ -8,7 +8,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 // Material
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatMenuModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+import { MatButtonModule, MatMenuModule, MatFormFieldModule, MatInputModule, MatProgressBarModule } from '@angular/material';
 
 // App
 import { environment } from '../environments/environment';
@@ -66,7 +66,7 @@ if (environment.production) {
         CoreModule,
         FormsModule,
         MatFormFieldModule, MatInputModule,
-        MatButtonModule, MatMenuModule,
+        MatButtonModule, MatMenuModule, MatProgressBarModule,
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     ],
     providers,
