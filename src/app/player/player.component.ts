@@ -116,7 +116,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
       // console.log(this.progress, this.audio.currentTime, this.audio.duration);
     }, false);
     this.audio.addEventListener('ended', () => {
-      this.nextPage();
+      // this.nextPage();
       this.playing = false;
     }, false);
   }
