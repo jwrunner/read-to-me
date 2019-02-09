@@ -1,4 +1,23 @@
 steps:
+# Decrypt env variables
+- name: gcr.io/cloud-builders/gcloud
+  args:
+  - kms
+  - decrypt
+  - --ciphertext-file=src\environments\environment.prod.enc
+  - --plaintext-file=src\environments\environment.prod.ts
+  - --location=global
+  - --keyring=R2M
+  - --key=cloudbuild-env
+- name: gcr.io/cloud-builders/gcloud
+  args:
+  - kms
+  - decrypt
+  - --ciphertext-file=src\environments\environment.enc
+  - --plaintext-file=src\environments\environment.ts
+  - --location=global
+  - --keyring=R2M
+  - --key=cloudbuild-env
 # Install
 - name: 'gcr.io/cloud-builders/npm'
   args: ['install']
