@@ -4,8 +4,8 @@ steps:
   args:
   - kms
   - decrypt
-  - --ciphertext-file=src\environments\environment.prod.enc
-  - --plaintext-file=src\environments\environment.prod.ts
+  - --ciphertext-file=environment.prod.enc
+  - --plaintext-file=src/environments/environment.prod.ts
   - --location=global
   - --keyring=R2M
   - --key=cloudbuild-env
@@ -13,8 +13,8 @@ steps:
   args:
   - kms
   - decrypt
-  - --ciphertext-file=src\environments\environment.enc
-  - --plaintext-file=src\environments\environment.ts
+  - --ciphertext-file=src/environments/environment.enc
+  - --plaintext-file=src/environments/environment.ts
   - --location=global
   - --keyring=R2M
   - --key=cloudbuild-env
