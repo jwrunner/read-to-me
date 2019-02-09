@@ -6,7 +6,7 @@
     "start": "ng serve --open --port 3100",
     "build": "ng build --prod",
     "build:dev": "ng build --aot",
-    "deploy": "firebase deploy --debug --token \"$FIREBASE_TOKEN\" --only hosting",
+    "deploy": "firebase deploy --debug --token \"$FIREBASE_TOKEN\" --only hosting -P production",
     "deploy:prod": "firebase deploy --only hosting -P production",
     "deploy:dev": "firebase deploy --only hosting -P default",
     "test": "ng test",
