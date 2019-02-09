@@ -4,7 +4,7 @@ steps:
   args:
   - kms
   - decrypt
-  - --ciphertext-file=environment.prod.enc
+  - --ciphertext-file=src/environments/environment.prod.enc
   - --plaintext-file=src/environments/environment.prod.ts
   - --location=global
   - --keyring=R2M
