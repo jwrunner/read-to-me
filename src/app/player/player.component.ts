@@ -102,13 +102,13 @@ export class PlayerComponent implements OnInit, OnDestroy {
     // tslint:disable-next-line:max-line-length
     const url = `https://firebasestorage.googleapis.com/v0/b/${environment.firebaseConfig.storageBucket}/o/${convertedPath}?alt=media&token=${page.mt}`;
 
-    if (typeof (this.audio) === 'object') {
-      this.audio.setAttribute('src', url);
-      this.audio.load();
-      this.audio.play();
-    } else {
-      this.audio = new Audio(url);
-    }
+    // if (typeof (this.audio) === 'object') {
+    //   this.audio.setAttribute('src', url);
+    //   this.audio.load();
+    // } else {
+    //   this.audio = new Audio(url);
+    // }
+    this.audio = new Audio(url);
     this.audio.play();
     this.playing = true;
     this.audio.addEventListener('timeupdate', () => {
@@ -116,7 +116,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
       // console.log(this.progress, this.audio.currentTime, this.audio.duration);
     }, false);
     this.audio.addEventListener('ended', () => {
-      // this.nextPage();
+      this.audio = null;
+      this.nextPage();
       this.playing = false;
     }, false);
   }
@@ -152,6 +153,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
     if (!this.lastPage) {
       const nextPage = this.chapterPages[this.currentPageIndex + 1];
       this.playerService.setPage(nextPage, this.page.bookTitle);
+    } else {
+      console.log('Chapter finished.');
     }
   }
 }
