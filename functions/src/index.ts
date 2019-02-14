@@ -1,10 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 
-// Service account required for accessing public download URL
-// const serviceAccount = require('../credentials.json')
 admin.initializeApp({
-    // credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://r2m-app.firebaseio.com'
 });
 
