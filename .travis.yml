@@ -37,7 +37,7 @@ jobs:
         - npm install https://github.com/ebidel/lighthousebot
       script:
         # Lighthouse benchmarks: performance, progressive web app, accessibility, best practices, SEO
-        - npm run lh -- --perf=90 --pwa=100 --a11y=80 --bp=80 --seo=80 https://read-books-to-me.firebaseapp.com/
+        - npm run lh -- --perf=87 --pwa=100 --a11y=90 --bp=100 --seo=80 https://read-books-to-me.firebaseapp.com/
 
     - stage: deploy-prod
       if: branch = master AND type = push
