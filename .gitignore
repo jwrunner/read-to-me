@@ -42,6 +42,7 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# Env
 */environments/environment.prod.ts
 */environments/environment.ts
-.env
+*/environments/env.tar

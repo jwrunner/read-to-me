@@ -33,6 +33,9 @@ steps:
 # Build
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'build']
+# Patch Safari Service Worker
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['link']
 # Deploy
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'deploy']
