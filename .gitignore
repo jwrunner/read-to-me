@@ -18,6 +18,7 @@ functions/node_modules
 *.launch
 .settings/
 *.sublime-workspace
+.vscode
 
 # IDE - VSCode
 .vscode/*
@@ -41,4 +42,7 @@ testem.log
 .DS_Store
 Thumbs.db
 
-*/environments
+# Env
+*/environments/environment.prod.ts
+*/environments/environment.ts
+*/environments/env.tar

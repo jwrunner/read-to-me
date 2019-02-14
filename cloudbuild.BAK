@@ -1,0 +1,43 @@
+steps:
+# Decrypt env variables
+- name: gcr.io/cloud-builders/gcloud
+  args:
+  - kms
+  - decrypt
+  - --ciphertext-file=.env.enc
+  - --plaintext-file=.env
+  - --location=global
+  - --keyring=R2M
+  - --key=cloudbuild-env
+- name: gcr.io/cloud-builders/gcloud
+  args:
+  - kms
+  - decrypt
+  - --ciphertext-file=src/environments/environment.prod.enc
+  - --plaintext-file=src/environments/environment.prod.ts
+  - --location=global
+  - --keyring=R2M
+  - --key=cloudbuild-env
+- name: gcr.io/cloud-builders/gcloud
+  args:
+  - kms
+  - decrypt
+  - --ciphertext-file=src/environments/environment.enc
+  - --plaintext-file=src/environments/environment.ts
+  - --location=global
+  - --keyring=R2M
+  - --key=cloudbuild-env
+# Install
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['install']
+# Build
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'build']
+# Patch Safari Service Worker
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['link']
+# Deploy
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'deploy']
+#- name: 'gcr.io/$PROJECT_ID/firebase'
+#  args: ['deploy']

@@ -1,14 +1,28 @@
 @import '../../styles/titanium/dependencies';
 
 .audio-player {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: $rtm-primary;
-    color: white;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: $rtm-primary;
+  color: white;
+  box-shadow: 0 -1px 6px rgba(0, 0, 0, .35);
+
+  &.showing-text {
+    // top: 0;
+    max-height: 100%;
+    // transition: all .2s ease-in-out;
+  }
 }
 
 .white-link {
-    color: white;
-    text-decoration: none;
+  color: white;
+  text-decoration: none;
+}
+
+.page-text {
+  background: white;
+  color: black;
+  overflow-y: auto;
+  flex-grow: 1;
 }

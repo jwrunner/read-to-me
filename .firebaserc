@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "read-books-to-me",
-    "production": "rbtm-prod"
+    "production": "r2m-app",
+    "default": "read-books-to-me"
   }
 }

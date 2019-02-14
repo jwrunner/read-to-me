@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BookService } from '../_services/book.service';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { IPage } from 'src/app/_types/page.interface';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { RouterHelperService } from '../../_services/router-helper.service';
@@ -36,12 +36,13 @@ export class ChapterHomeComponent implements OnInit {
     const bookId = await this.routerHelper.getBookId();
     const chapterId = await this.routerHelper.getChapterId();
     // tslint:disable-next-line:max-line-length
-    this.pagesSubscription = this.afs.collection<IPage>(`books/${bookId}/chapters/${chapterId}/pages`, ref => ref.orderBy('id')).valueChanges()
-      .subscribe(pages => {
+    this.pagesSubscription = this.afs.collection<IPage>(`books/${bookId}/chapters/${chapterId}/pages`, ref => ref.orderBy('id'))
+      .valueChanges().subscribe(pages => {
         this.pages = pages;
       });
   }
 
+  // TODO: turn into a pipe
   prefixIfNumber(chapterId) {
     if (isNaN(chapterId)) {
       return chapterId;

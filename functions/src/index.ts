@@ -1,11 +1,8 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 
-// Service account required for accessing public download URL
-const serviceAccount = require('../credentials.json')
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://read-books-to-me.firebaseio.com'
+    databaseURL: 'https://r2m-app.firebaseio.com'
 });
 
 const db = admin.firestore();
@@ -42,7 +39,7 @@ async function increasePageCount(bookId: string, chapterId: string) {
         const book = await db.doc(`books/${bookId}`).get().then(doc => doc.data());
         const increasedBkPageCount = book.pages + 1;
         await db.doc(`books/${bookId}`).set({ pages: increasedBkPageCount }, { merge: true });
-
+        
         const chapter = await db.doc(`books/${bookId}/chapters/${chapterId}`).get().then(doc => doc.data());
         const increasedChPageCount = chapter.pages + 1;
         await db.doc(`books/${bookId}/chapters/${chapterId}`).set({ pages: increasedChPageCount }, { merge: true });

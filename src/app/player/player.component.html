@@ -1,18 +1,60 @@
-<div class="audio-player d-flex py-2" style="align-items: center;" *ngIf="page?.id" [@fadeUpDownAnimation]>
-  <button mat-button>
-    <i class="fas fa-play-circle fa-2x" *ngIf="!playing"></i>
-    <i class="fas fa-pause-circle fa-2x" *ngIf="playing"></i>
-  </button>
+<div class="audio-player d-flex flex-column" *ngIf="page?.id" [@fadeUpDownAnimation] [ngClass]="{'showing-text' : showText}">
+  <mat-progress-bar *ngIf="!showText" style="height: 8px; flex-shrink: 0" color="accent" mode="determinate" [value]="progress"></mat-progress-bar>
+  <div class="d-flex py-2" style="align-items: center; justify-content: space-between;">
+    <div class="p-2 small text-center hidden-xs-down">
+      <a routerLink="/" class="white-link">{{page.bookTitle}}: </a>
+      <a routerLink="/" class="white-link">Chapter {{page.chapterId}}</a>,
+      Page {{page.id}}
+    </div>
 
-  <div>
-    <!-- truncate -->
-    <a routerLink="/" class="white-link small">{{page.bookTitle}}</a><br />
-    <a routerLink="/" class="white-link">Chapter {{page.chapterId}}</a>,
-    Page {{page.id}}
+    <div>
+      <button mat-button *ngIf="chapterPages && !firstPage" (click)="prevPage()">
+        <i class="fas fa-angle-left"></i>
+      </button>
+      <button mat-button (click)="rewind30()">
+        -30
+      </button>
+      <button mat-button (click)="unPause()" *ngIf="!playing">
+        <i class="fas fa-play-circle fa-2x"></i>
+      </button>
+      <button mat-button (click)="pause()" *ngIf="playing">
+        <i class="fas fa-pause-circle fa-2x"></i>
+      </button>
+      <button mat-button (click)="fastForward30()">
+        +30
+      </button>
+      <button mat-button *ngIf="chapterPages && !lastPage" (click)="nextPage()">
+        <i class="fas fa-angle-right"></i>
+      </button>
+    </div>
+
+    <div>
+      <button *ngIf="!showText" mat-button (click)="showText = true">
+        <i class="fas fa-align-left"></i>
+      </button>
+
+      <button *ngIf="showText" mat-button (click)="showText = false">
+        <i class="fas fa-arrow-down"></i>
+      </button>
+
+      <button *ngIf="!showText" mat-button (click)="playerService.clearPage()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
   </div>
 
-  <div title="{{page.text}}">
-    Text
+  <div class="p-2 small hidden-sm-up">
+    <a routerLink="/" class="white-link">{{page.bookTitle}}: </a>
+    <a routerLink="/" class="white-link">Ch {{page.chapterId}}</a>,
+    Pg {{page.id}}
   </div>
-  <button mat-button class="ml-auto" (click)="playerService.clearPage()"><i class="fas fa-times"></i></button>
+
+  <mat-progress-bar *ngIf="showText" style="height: 8px; flex-shrink: 0" color="accent" mode="determinate" [value]="progress"></mat-progress-bar>
+
+  <div class="page-text p-2" *ngIf="showText">
+    <!-- <pre>
+      {{chapterPages | json}}
+    </pre> -->
+    {{page.text}}
+  </div>
 </div>
