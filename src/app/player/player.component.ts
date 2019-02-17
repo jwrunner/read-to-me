@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { trigger, transition, animate, style } from '@angular/animations';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { IPage } from '../_types/page.interface';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'rtm-player',
@@ -46,13 +47,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
   constructor(
     public playerService: PlayerService,
     private afs: AngularFirestore,
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit() {
     this.subscribeToCurrentPage();
-
   }
-
   ngOnDestroy() {
     this.currentPageSub.unsubscribe();
     this.currentChapterSub.unsubscribe();
@@ -68,6 +68,9 @@ export class PlayerComponent implements OnInit, OnDestroy {
           this.currentChapterId = this.page.chapterId;
           this.subscribeToCurrentChapter(page.bookId, page.chapterId);
         }
+      } else if (this.audio && !this.audio.paused) {
+        this.audio.pause();
+        this.audio = null; // to reset player
       }
     });
   }
@@ -81,9 +84,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
   }
 
   private checkForSurroundingPages() {
-    console.log(this.currentPageIndex);
     this.currentPageIndex = this.chapterPages.findIndex(p => p.id === this.page.id);
-    console.log('pageIndex set to: ', this.currentPageIndex);
     if (this.currentPageIndex >= this.chapterPages.length - 1) {
       this.lastPage = true;
     } else { this.lastPage = false; }
@@ -108,17 +109,17 @@ export class PlayerComponent implements OnInit, OnDestroy {
     // } else {
     //   this.audio = new Audio(url);
     // }
+
     this.audio = new Audio(url);
     this.audio.play();
     this.playing = true;
     this.audio.addEventListener('timeupdate', () => {
       this.progress = (this.audio.currentTime / this.audio.duration) * 100;
-      // console.log(this.progress, this.audio.currentTime, this.audio.duration);
     }, false);
     this.audio.addEventListener('ended', () => {
       this.audio = null;
-      this.nextPage();
       this.playing = false;
+      this.nextPage();
     }, false);
   }
 
@@ -148,13 +149,14 @@ export class PlayerComponent implements OnInit, OnDestroy {
   }
 
   nextPage() {
-    // TODO, see why this gets fired too many
-    console.log('lastPage:', this.lastPage);
     if (!this.lastPage) {
       const nextPage = this.chapterPages[this.currentPageIndex + 1];
       this.playerService.setPage(nextPage, this.page.bookTitle);
     } else {
-      console.log('Chapter finished.');
+      this.snackBar.open('Chapter Finished.', '', { duration: 3000 });
+      this.playerService.clearPage();
+      // TODO: go to next chapter.
+      // TODO: mark chapter as read.
     }
   }
 }

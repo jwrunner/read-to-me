@@ -32,6 +32,7 @@ export class PlayerService {
   constructor() { }
 
   setPage(page: IPage, bookTitle: string) {
+    this.clearPage();
     const current = { bookTitle, ...page };
     this._currentPage.next(current);
   }
