@@ -1,21 +1,21 @@
 <div class="d-flex flex-column" style="min-height: calc(100vh - 56px); background: #f8f8f8;">
-  <div class="text-center" style="flex-grow: 1">
+  <div style="flex-grow: 1">
     <ng-container *ngIf="auth.user | async; else login">
       <div *ngIf="booksObservable | async as books">
         <div *ngIf="!books.length" class="px-2 py-3" style="background: #efefef;">
           Great! You're all set to start listening. Add your first book to your library.
         </div>
 
-        <h3 *ngIf="books.length">My Books</h3>
         <div class="d-flex flex-column centered-400-column px-2">
+          <h3 class="mb-2" *ngIf="books.length">My Books</h3>
           <rtm-book-card class="mb-2" style="display: block" *ngFor="let book of books" [book]="book"></rtm-book-card>
 
-          <button mat-raised-button color="accent" (click)="addBook = true"
-            *ngIf="!addBook && books.length && books.length < 11" class="my-3">Add Book</button>
-            <div class="my-3" *ngIf="books.length >= 11">
-              You have reached the maximum number of books available for the beta. Please wait until the delete feature
-              is ready and then delete some of your old books.
-            </div>
+          <button mat-fab color="accent" (click)="addBook = true" *ngIf="!addBook && books.length && books.length < 11"
+            matTooltip="Add Word"><i class="fas fa-plus"></i></button>
+          <div class="my-3" *ngIf="books.length >= 11">
+            You have reached the maximum number of books available. Please wait until the delete feature
+            is ready and then delete some of your old books.
+          </div>
 
           <rtm-add-book *ngIf="!books.length || addBook"></rtm-add-book>
         </div>
@@ -33,10 +33,9 @@
     </ng-template>
   </div>
 
-  <!-- <a mat-button routerLinkActive="active" routerLink="scan" class="mr-1">Scan</a>
-<a mat-button routerLinkActive="active" routerLink="listen">Listen</a> -->
-
-  <div class="p-2 small text-center" style="background: #efefef;">
-    Built by Jacob Bowdoin. {{date | date: 'y'}}.
+<!-- style="background: #efefef;" -->
+  <div class="p-2 small" >
+    Built by Jacob Bowdoin. 
+    <!-- {{date | date: 'y'}}. -->
   </div>
 </div>
