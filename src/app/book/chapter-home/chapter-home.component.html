@@ -9,7 +9,7 @@
   <div class="d-flex flex-column">
     <mat-nav-list class="pt-0" *ngIf="chapter.pages">
       <mat-list-item *ngFor="let page of pages" (click)="setPage(page)">
-        <i class="fas fa-play text-muted small" matListIcon style="font-size: 1rem; width: 1rem; height: 1rem;"></i>
+        <i class="fas fa-play text-muted" matListIcon style="font-size: 1rem; width: 1rem; height: 1rem;"></i>
         <div matLine>Page {{page.id}}</div>
         <div matLine class="small text-muted truncate">{{page.text}}</div>
         <!-- <button mat-icon-button [matMenuTriggerFor]="pageMenu" rtmClickStopPropagation><i class="fas fa-ellipsis-v"></i></button>
@@ -19,8 +19,6 @@
       </mat-list-item>
     </mat-nav-list>
 
-    <div class="p-2">
-      <rtm-scan></rtm-scan>
-    </div>
+    <rtm-scan></rtm-scan>
   </div>
 </ng-container>
