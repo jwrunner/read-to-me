@@ -115,9 +115,7 @@ export class ScanComponent implements OnInit {
     }
 
     writeInPageNumber() {
-        const dialogRef = this.dialog.open(PageNumberDialogComponent, {
-            data: { pageNumber: this.pageNumber }
-        });
+        const dialogRef = this.dialog.open(PageNumberDialogComponent);
 
         dialogRef.afterClosed().subscribe(returnedNumber => {
             if (returnedNumber) {
@@ -133,18 +131,20 @@ export class ScanComponent implements OnInit {
         <div mat-dialog-content>
             <p>Set page number:</p>
             <mat-form-field>
-                <input matInput [(ngModel)]="data.pageNumber" type="number" cdkFocusInitial>
+                <input matInput [(ngModel)]="writeInNumber" type="number" cdkFocusInitial>
             </mat-form-field>
         </div>
         <div mat-dialog-actions>
         <button mat-button (click)="onNoClick()">Cancel</button>
-        <button mat-button [mat-dialog-close]="data.pageNumber" [disabled]="!data.pageNumber">Set</button>
+        <button mat-button [mat-dialog-close]="writeInNumber" [disabled]="!writeInNumber">Set</button>
         </div>`,
 })
 export class PageNumberDialogComponent {
+    writeInNumber: number;
+
     constructor(
         public dialogRef: MatDialogRef<PageNumberDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any) { }
+    ) { }
 
     onNoClick(): void {
         this.dialogRef.close();
