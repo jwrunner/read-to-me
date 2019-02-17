@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
-import { MatButtonModule, MatFormFieldModule, MatInputModule, MatSnackBarModule, MatProgressBarModule } from '@angular/material';
+import { MatButtonModule, MatFormFieldModule, MatInputModule, MatSnackBarModule, MatProgressBarModule, MatListModule, MatMenuModule } from '@angular/material';
 
 import { BookRoutingModule } from './book-routing.module';
 import { BookService } from './_services/book.service';
@@ -17,6 +17,7 @@ import { ChapterHomeComponent } from './chapter-home/chapter-home.component';
 import { ScanComponent } from './scan/scan.component';
 import { DropZoneDirective } from './scan/drop-zone.directive';
 import { PrefixChapterNumberPipe } from '../_pipes/prefix-chapter-number.pipe';
+import { ClickStopPropagationDirective } from '../_directives/clickStopPropagation.directive';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { PrefixChapterNumberPipe } from '../_pipes/prefix-chapter-number.pipe';
     DropZoneDirective,
     ScanComponent,
     PrefixChapterNumberPipe,
+    ClickStopPropagationDirective,
   ],
   imports: [
     CommonModule,
@@ -40,6 +42,9 @@ import { PrefixChapterNumberPipe } from '../_pipes/prefix-chapter-number.pipe';
     MatInputModule,
     MatSnackBarModule,
     MatProgressBarModule,
+    MatListModule,
+    MatMenuModule,
+
   ],
   providers: [
     BookService,

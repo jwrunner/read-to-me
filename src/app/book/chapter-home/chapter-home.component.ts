@@ -42,4 +42,8 @@ export class ChapterHomeComponent implements OnInit {
       });
   }
 
+  async deletePage(pageId: any) {
+    // TODO
+    console.log('need to delete', pageId);
+  }
 }
