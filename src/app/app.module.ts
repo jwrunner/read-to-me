@@ -23,9 +23,10 @@ import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
 import { BookCardComponent } from './home/book-card/book-card.component';
 import { AddBookComponent } from './home/add-book/add-book.component';
+import { PlayerComponent } from './player/player.component';
 
 import * as Sentry from '@sentry/browser';
-import { PlayerComponent } from './player/player.component';
+import { FirstNamePipe } from './_pipes/first-name.pipe';
 
 Sentry.init({
   dsn: 'https://e983452f9c97438abf3426a607b5ead5@sentry.io/1380788'
@@ -56,6 +57,7 @@ if (environment.production) {
         BookCardComponent,
         AddBookComponent,
         PlayerComponent,
+        FirstNamePipe,
     ],
     imports: [
         BrowserModule,

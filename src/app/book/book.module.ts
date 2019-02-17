@@ -16,6 +16,7 @@ import { ChapterHomeComponent } from './chapter-home/chapter-home.component';
 
 import { ScanComponent } from './scan/scan.component';
 import { DropZoneDirective } from './scan/drop-zone.directive';
+import { PrefixChapterNumberPipe } from '../_pipes/prefix-chapter-number.pipe';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { DropZoneDirective } from './scan/drop-zone.directive';
     ChapterHomeComponent,
     DropZoneDirective,
     ScanComponent,
+    PrefixChapterNumberPipe,
   ],
   imports: [
     CommonModule,
