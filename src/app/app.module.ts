@@ -8,7 +8,10 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 // Material
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatMenuModule, MatFormFieldModule, MatInputModule, MatProgressBarModule } from '@angular/material';
+import {
+  MatButtonModule, MatMenuModule, MatFormFieldModule,
+  MatInputModule, MatProgressBarModule, MatTooltipModule, MatListModule
+} from '@angular/material';
 
 // App
 import { environment } from '../environments/environment';
@@ -23,9 +26,10 @@ import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
 import { BookCardComponent } from './home/book-card/book-card.component';
 import { AddBookComponent } from './home/add-book/add-book.component';
+import { PlayerComponent } from './player/player.component';
 
 import * as Sentry from '@sentry/browser';
-import { PlayerComponent } from './player/player.component';
+import { FirstNamePipe } from './_pipes/first-name.pipe';
 
 Sentry.init({
   dsn: 'https://e983452f9c97438abf3426a607b5ead5@sentry.io/1380788'
@@ -33,7 +37,7 @@ Sentry.init({
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  constructor() {}
+  constructor() { }
   handleError(error) {
     Sentry.captureException(error.originalError || error);
     throw error;
@@ -49,27 +53,28 @@ if (environment.production) {
 }
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        HomeComponent,
-        HeaderComponent,
-        BookCardComponent,
-        AddBookComponent,
-        PlayerComponent,
-    ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        AppRoutingModule,
-        AngularFireModule.initializeApp(firebaseConfig),
-        AngularFirestoreModule.enablePersistence({ experimentalTabSynchronization: true }),
-        CoreModule,
-        FormsModule,
-        MatFormFieldModule, MatInputModule,
-        MatButtonModule, MatMenuModule, MatProgressBarModule,
-        ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    ],
-    providers,
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    HeaderComponent,
+    BookCardComponent,
+    AddBookComponent,
+    PlayerComponent,
+    FirstNamePipe,
+  ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFirestoreModule.enablePersistence({ experimentalTabSynchronization: true }),
+    CoreModule,
+    FormsModule,
+    MatFormFieldModule, MatInputModule, MatTooltipModule, MatListModule,
+    MatButtonModule, MatMenuModule, MatProgressBarModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+  ],
+  providers,
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

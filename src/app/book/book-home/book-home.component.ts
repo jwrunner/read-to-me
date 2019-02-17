@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { BookService } from '../_services/book.service';
 
 @Component({
   selector: 'rtm-book-home',
@@ -9,7 +8,6 @@ import { BookService } from '../_services/book.service';
 export class BooksHomeComponent implements OnInit {
 
   constructor(
-    public bookService: BookService,
   ) { }
 
   ngOnInit() { }
