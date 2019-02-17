@@ -1,16 +1,33 @@
-<ng-container *ngIf="chaptersObservable | async as chapters">
+<ng-container *ngIf="bookService.currentBook | async as book">
+  <div class="book-header d-flex pr-2">
+    <a mat-button routerLink="/" style="min-width: 48px;">
+      <i class="fas fa-arrow-left"></i>
+    </a>
+    <h4 class="m-0 truncate">{{book.title}}</h4>
+  </div>
+</ng-container>
 
-  <h3 class="text-center" *ngIf="chapters.length">Chapters</h3>
-  <div *ngIf="!chapters.length" class="px-2 py-3 text-center" style="background: #efefef;">
+<div *ngIf="chaptersObservable | async as chapters">
+
+  <div *ngIf="!chapters.length" class="px-2 py-3" style="background: #efefef;">
     Add a chapter to listen to:
   </div>
-  
-  <div class="d-flex flex-column centered-400-column px-2">
-    <rtm-chapter-card class="mb-2 text-center" style="display: block" *ngFor="let chapter of chapters" [chapter]="chapter"></rtm-chapter-card>
 
-    <button mat-raised-button color="accent" (click)="addChapter = true" *ngIf="!addChapter && chapters.length" class="my-3">Add Chapter</button>
+  <div class="d-flex flex-column centered-400-column px-2">
+
+    <mat-nav-list class="pt-0">
+      <mat-list-item *ngFor="let chapter of chapters" routerLink="{{chapter.id}}">
+        <i class="fas fa-book-open small text-muted" matListIcon></i>
+        <div matLine> {{chapter.id | prefixChapterNumber}} </div>
+        <div matLine class="small text-muted" *ngIf="chapter.pages">{{chapter.pages}} {{chapter.pages === 1 ? 'page' :
+          'pages'}} scanned</div>
+      </mat-list-item>
+    </mat-nav-list>
+
+    <button mat-raised-button color="accent" (click)="addChapter = true" *ngIf="!addChapter && chapters.length" class="my-3">Add
+      Chapter</button>
 
     <rtm-add-chapter class="mt-2" *ngIf="!chapters.length || addChapter"></rtm-add-chapter>
   </div>
 
-</ng-container>
+</div>

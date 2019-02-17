@@ -42,12 +42,8 @@ export class ChapterHomeComponent implements OnInit {
       });
   }
 
-  // TODO: turn into a pipe
-  prefixIfNumber(chapterId) {
-    if (isNaN(chapterId)) {
-      return chapterId;
-    } else {
-      return `Chapter ${chapterId}`;
-    }
+  async deletePage(pageId: any) {
+    // TODO
+    console.log('need to delete', pageId);
   }
 }

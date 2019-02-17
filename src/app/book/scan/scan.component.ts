@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { AngularFireUploadTask, AngularFireStorage } from '@angular/fire/storage';
-// import { AngularFirestore } from '@angular/fire/firestore';
-
+import { MatSnackBar, MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { Observable } from 'rxjs';
-// import { tap } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material';
-import { BookService } from '../_services/book.service';
+
 import { AuthService } from 'src/app/core/auth.service';
+import { BookService } from '../_services/book.service';
 
 @Component({
     selector: 'rtm-scan',
@@ -14,7 +12,7 @@ import { AuthService } from 'src/app/core/auth.service';
     styleUrls: ['./scan.component.scss']
 })
 export class ScanComponent implements OnInit {
-    page = 1;
+    pageNumber = 1;
 
     isHovering: boolean;
     isUploading = false;
@@ -25,22 +23,21 @@ export class ScanComponent implements OnInit {
 
 
     constructor(
-        // private afs: AngularFirestore,
         private storage: AngularFireStorage,
         private snackBar: MatSnackBar,
         private bookService: BookService,
         private auth: AuthService,
+        private dialog: MatDialog,
     ) { }
 
     ngOnInit() {
-        // this.getBookmark();
         // TODO: get last page scanned in this book (save as value on book doc)
+        // this.getBookmark();
     }
 
     toggleHover(event: boolean) {
         this.isHovering = event;
     }
-
 
     async startUpload(event: FileList) {
         if (this.isUploading) {
@@ -63,7 +60,7 @@ export class ScanComponent implements OnInit {
         const book = await this.bookService.getBook();
         // const bookTitle = book.title.replace(/[^a-z0-9+]+/gi, '_');
         const chapter = await this.bookService.getChapter();
-        const path = `scans/BK${book.id}_CH${chapter.id}_PG${this.page}_${new Date().getTime()}`;
+        const path = `scans/BK${book.id}_CH${chapter.id}_PG${this.pageNumber}_${new Date().getTime()}`;
 
         const { uid } = await this.auth.getUser();
         const customMetadata = { uid: uid };
@@ -73,9 +70,14 @@ export class ScanComponent implements OnInit {
 
         this.task.then(snap => {
             if (snap.state === 'success') {
-                // tslint:disable-next-line:max-line-length
-                this.snackBar.open(`Page ${this.page} uploaded. Wait a moment for the scanned page to show up or continue to scan the next page.`, 'Dismiss', { duration: 8000 });
-                this.page++;
+                if (localStorage.getItem('user-knows-to-wait')) {
+                    this.snackBar.open(`Page ${this.pageNumber} uploaded.`, '', { duration: 1000, verticalPosition: 'top' });
+                } else {
+                    // tslint:disable-next-line:max-line-length
+                    this.snackBar.open(`Page ${this.pageNumber} uploaded. Wait a moment for the scanned page to show up or continue to scan the next page.`, 'Dismiss', { duration: 8000, verticalPosition: 'top' });
+                    localStorage.setItem('user-knows-to-wait', 'yes');
+                }
+                this.pageNumber++;
                 this.isUploading = false;
             }
         }).catch(() => {
@@ -103,5 +105,48 @@ export class ScanComponent implements OnInit {
     //     };
     //     return this.afs.doc<Bookmark>('settings/bookmark').set(this.bookmark);
     // }
+
+    increasePageNumber() {
+        this.pageNumber++;
+    }
+
+    decreasePageNumber() {
+        this.pageNumber--;
+    }
+
+    writeInPageNumber() {
+        const dialogRef = this.dialog.open(PageNumberDialogComponent, {
+            data: { pageNumber: this.pageNumber }
+        });
+
+        dialogRef.afterClosed().subscribe(returnedNumber => {
+            if (returnedNumber) {
+                this.pageNumber = returnedNumber;
+            }
+        });
+    }
 }
 
+@Component({
+    selector: 'rtm-page-number-dialog',
+    template: `
+        <div mat-dialog-content>
+            <p>Set page number:</p>
+            <mat-form-field>
+                <input matInput [(ngModel)]="data.pageNumber" type="number" cdkFocusInitial>
+            </mat-form-field>
+        </div>
+        <div mat-dialog-actions>
+        <button mat-button (click)="onNoClick()">Cancel</button>
+        <button mat-button [mat-dialog-close]="data.pageNumber" [disabled]="!data.pageNumber">Set</button>
+        </div>`,
+})
+export class PageNumberDialogComponent {
+    constructor(
+        public dialogRef: MatDialogRef<PageNumberDialogComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: any) { }
+
+    onNoClick(): void {
+        this.dialogRef.close();
+    }
+}

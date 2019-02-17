@@ -4,6 +4,7 @@ import { Chapter } from 'src/app/_types/chapter.interface';
 import { RouterHelperService } from '../../_services/router-helper.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { switchMap } from 'rxjs/operators';
+import { BookService } from '../_services/book.service';
 
 @Component({
   selector: 'rtm-chapters-list',
@@ -18,13 +19,14 @@ export class ChaptersListComponent implements OnInit {
   constructor(
     private routerHelper: RouterHelperService,
     private afs: AngularFirestore,
+    public bookService: BookService,
   ) { }
 
   ngOnInit() {
     this.getChapters();
   }
 
-  private async getChapters() {
+  private getChapters() {
     this.chaptersObservable = this.routerHelper.bookId.pipe(
       switchMap(bookId => {
         if (bookId) {
