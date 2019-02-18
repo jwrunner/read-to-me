@@ -1,9 +1,10 @@
 export interface IPage {
+    id?: string;
     text: string;
     bookId: string;
     chapterId: string;
-    id: string;
-    date: Date;
+    pageNumber: number;
+    dateCreated: number;
     audioPath: string;
     mt: string;
 }

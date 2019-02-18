@@ -1,11 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+
 import { AuthService } from 'src/app/core/auth.service';
-import { AngularFirestore, Action, DocumentSnapshotDoesNotExist, DocumentSnapshotExists } from '@angular/fire/firestore';
-import { firestore } from 'firebase/app';
-import { Chapter } from 'src/app/_types/chapter.interface';
-import { take } from 'rxjs/operators';
-import { BookService } from '../_services/book.service';
+import { IChapter } from 'src/app/_types/chapter.interface';
 import { RouterHelperService } from '../../_services/router-helper.service';
 
 @Component({
@@ -15,15 +13,13 @@ import { RouterHelperService } from '../../_services/router-helper.service';
 })
 export class AddChapterComponent implements OnInit {
 
-  chapterId: string;
-  chapterTitle: string;
+  chapterName: string;
   addingChapter = false;
 
   constructor(
     private router: Router,
     private auth: AuthService,
     private afs: AngularFirestore,
-    private bookService: BookService,
     private routerHelper: RouterHelperService,
   ) { }
 
@@ -31,36 +27,23 @@ export class AddChapterComponent implements OnInit {
   }
 
   async addChapter() {
-    if (this.chapterId) {
+    if (this.chapterName) {
       this.addingChapter = true;
 
       const { uid, displayName } = await this.auth.getUser();
-      const chapterData: Chapter = {
-        id: this.chapterId,
-        title: this.chapterTitle || null,
+      const bookId = await this.routerHelper.getBookId();
+
+      const chapterData: IChapter = {
+        name: this.chapterName,
         ownerId: uid,
         ownerName: displayName || null,
-        dateCreated: firestore.FieldValue.serverTimestamp(),
+        bookId: bookId,
+        dateCreated: Date.now(),
         pages: 0,
       };
 
-      const bookId = await this.routerHelper.getBookId();
-      await this.addIfNew(`books/${bookId}/chapters/${this.chapterId}`, chapterData);
-      this.router.navigate([`/book/${bookId}/${this.chapterId}`]);
+      const docRef = await this.afs.collection('chapters').add(chapterData);
+      this.router.navigate([`/book/${bookId}/${docRef.id}`]);
     }
-  }
-
-  private addIfNew<T>(ref: string, data: Chapter): Promise<void> {
-    const doc = this.afs.doc(ref).snapshotChanges()
-      .pipe(take(1))
-      .toPromise();
-
-    return doc.then((snap: Action<DocumentSnapshotDoesNotExist | DocumentSnapshotExists<T>>) => {
-      return snap.payload.exists ? this.duplicate() : this.afs.doc(ref).set(data);
-    });
-  }
-
-  private duplicate() {
-    console.log('this chapter is already created');
   }
 }

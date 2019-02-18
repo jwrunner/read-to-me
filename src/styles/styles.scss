@@ -1,5 +1,5 @@
-// Custom
-@import 'custom/components';
-
 // Shared Titanium SCSS package (which depends upon custom/colors)
 @import 'titanium/titanium';
+
+// Custom
+@import 'custom/components';

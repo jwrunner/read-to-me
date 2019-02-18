@@ -24,8 +24,10 @@
             </mat-list-item>
           </mat-nav-list>
 
-          <button mat-fab color="accent" (click)="addBook = true" *ngIf="!addBook && books.length && books.length < 11"
-            matTooltip="Add Book"><i class="fas fa-plus mr-1"></i><i class="fas fa-book"></i></button>
+          <button mat-raised-button color="accent" (click)="addBook = true"
+            *ngIf="!addBook && books.length && books.length < 11" class="m-2">Add Book</button>
+          <!-- <button mat-fab color="accent" (click)="addBook = true" *ngIf="!addBook && books.length && books.length < 11"
+            matTooltip="Add Book"><i class="fas fa-plus mr-1"></i><i class="fas fa-book"></i></button> -->
 
           <div class="my-3" *ngIf="books.length >= 11">
             You have reached the maximum number of books available. Please wait until the delete feature

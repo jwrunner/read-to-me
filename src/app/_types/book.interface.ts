@@ -1,9 +1,9 @@
-export interface Book {
+export interface IBook {
     id?: string;
     title: string;
     ownerId: string;
     ownerName: string;
-    dateCreated: any; // FieldValue; // import { FieldValue } from '@google-cloud/firestore';
+    dateCreated: number;
     pages: number;
     author?: string;
     publicationYear?: number;

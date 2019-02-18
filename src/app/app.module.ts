@@ -24,7 +24,6 @@ import { RouterHelperService } from './_services/router-helper.service';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
-import { BookCardComponent } from './home/book-card/book-card.component';
 import { AddBookComponent } from './home/add-book/add-book.component';
 import { PlayerComponent } from './player/player.component';
 
@@ -57,7 +56,6 @@ if (environment.production) {
     AppComponent,
     HomeComponent,
     HeaderComponent,
-    BookCardComponent,
     AddBookComponent,
     PlayerComponent,
     FirstNamePipe,

@@ -18,7 +18,7 @@
     <mat-nav-list class="pt-0">
       <mat-list-item *ngFor="let chapter of chapters" routerLink="{{chapter.id}}">
         <i class="fas fa-book-open small text-muted" matListIcon></i>
-        <div matLine> {{chapter.id | prefixChapterNumber}} </div>
+        <div matLine> {{chapter.name | prefixChapterNumber}}</div>
         <div matLine class="small text-muted" *ngIf="chapter.pages">{{chapter.pages}} {{chapter.pages === 1 ? 'page' :
           'pages'}} scanned</div>
       </mat-list-item>

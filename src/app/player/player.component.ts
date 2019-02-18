@@ -1,12 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { PlayerService, CurrentPage } from './player.service';
-import { Subscription } from 'rxjs';
-import { Book } from '../_types/book.interface';
-import { environment } from 'src/environments/environment';
-import { trigger, transition, animate, style } from '@angular/animations';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { IPage } from '../_types/page.interface';
 import { MatSnackBar } from '@angular/material';
+import { trigger, transition, animate, style } from '@angular/animations';
+import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { environment } from 'src/environments/environment';
+import { PlayerService, CurrentPage } from './player.service';
+import { IBook } from '../_types/book.interface';
+import { IPage } from '../_types/page.interface';
 
 @Component({
   selector: 'rtm-player',
@@ -28,10 +30,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   playing = false;
   page: CurrentPage;
-  book: Book;
+  book: IBook;
   audio: any;
   progress: number;
-  showText: boolean;
+  minimal: boolean;
   chapterPages: IPage[];
 
   currentPageIndex: number;
@@ -75,9 +77,22 @@ export class PlayerComponent implements OnInit, OnDestroy {
     });
   }
 
-  private subscribeToCurrentChapter(bookId, chapterId) {
-    this.currentChapterSub = this.afs.collection<IPage>(`books/${bookId}/chapters/${chapterId}/pages`, ref => ref.orderBy('id'))
-      .valueChanges().subscribe(pages => {
+  private subscribeToCurrentChapter(bookId: string, chapterId: string) {
+    this.currentChapterSub = this.afs.collection<IPage>('pages', ref =>
+      ref.where('bookId', '==', bookId)
+        .where('chapterId', '==', chapterId)
+        .orderBy('pageNumber'))
+      .snapshotChanges().pipe(
+        map(arr => {
+          return arr.map(snap => {
+            const data = snap.payload.doc.data() as IPage;
+            const id = snap.payload.doc.id;
+            return {
+              id, ...data
+            };
+          });
+        })
+      ).subscribe(pages => {
         this.chapterPages = pages;
         this.checkForSurroundingPages();
       });
@@ -103,18 +118,13 @@ export class PlayerComponent implements OnInit, OnDestroy {
     // tslint:disable-next-line:max-line-length
     const url = `https://firebasestorage.googleapis.com/v0/b/${environment.firebaseConfig.storageBucket}/o/${convertedPath}?alt=media&token=${page.mt}`;
 
-    // if (typeof (this.audio) === 'object') {
-    //   this.audio.setAttribute('src', url);
-    //   this.audio.load();
-    // } else {
-    //   this.audio = new Audio(url);
-    // }
-
     this.audio = new Audio(url);
     this.audio.play();
     this.playing = true;
     this.audio.addEventListener('timeupdate', () => {
-      this.progress = (this.audio.currentTime / this.audio.duration) * 100;
+      if (this.audio) {
+        this.progress = (this.audio.currentTime / this.audio.duration) * 100;
+      }
     }, false);
     this.audio.addEventListener('ended', () => {
       this.audio = null;
@@ -144,14 +154,14 @@ export class PlayerComponent implements OnInit, OnDestroy {
   prevPage() {
     if (!this.firstPage) {
       const previousPage = this.chapterPages[this.currentPageIndex - 1];
-      this.playerService.setPage(previousPage, this.page.bookTitle);
+      this.playerService.setPage(previousPage, this.page.bookTitle, this.page.chapterName);
     }
   }
 
   nextPage() {
     if (!this.lastPage) {
       const nextPage = this.chapterPages[this.currentPageIndex + 1];
-      this.playerService.setPage(nextPage, this.page.bookTitle);
+      this.playerService.setPage(nextPage, this.page.bookTitle, this.page.chapterName);
     } else {
       this.snackBar.open('Chapter Finished.', '', { duration: 3000 });
       this.playerService.clearPage();

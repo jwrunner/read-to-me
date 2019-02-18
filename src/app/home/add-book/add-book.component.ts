@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { firestore } from 'firebase/app';
-import { Router } from '@angular/router';
-import { AuthService } from 'src/app/core/auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Book } from 'src/app/_types/book.interface';
+import { Router } from '@angular/router';
+
+import { AuthService } from 'src/app/core/auth.service';
+import { IBook } from 'src/app/_types/book.interface';
 
 @Component({
   selector: 'rtm-add-book',
@@ -28,13 +28,13 @@ export class AddBookComponent implements OnInit {
     if (this.bookTitle) {
       this.addingBook = true;
 
-      const capitalizedBookTitle = this.bookTitle.replace(/^\w/, c => c.toUpperCase());
+      const capitalizedBookTitle = this.bookTitle.replace(/^\w/, c => c.toUpperCase()).trim();
       const { uid, displayName } = await this.auth.getUser();
-      const bookData: Book = {
+      const bookData: IBook = {
         title: capitalizedBookTitle,
         ownerId: uid,
         ownerName: displayName || null,
-        dateCreated: firestore.FieldValue.serverTimestamp(),
+        dateCreated: Date.now(),
         pages: 0,
       };
 
@@ -42,5 +42,4 @@ export class AddBookComponent implements OnInit {
       this.router.navigate([`/book/${docRef.id}`]);
     }
   }
-
 }
