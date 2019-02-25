@@ -40,9 +40,9 @@ async function increasePageCount(bookId: string, chapterId: string) {
         const increasedBkPageCount = book.pages + 1;
         await db.doc(`books/${bookId}`).set({ pages: increasedBkPageCount }, { merge: true });
         
-        const chapter = await db.doc(`books/${bookId}/chapters/${chapterId}`).get().then(doc => doc.data());
+        const chapter = await db.doc(`chapters/${chapterId}`).get().then(doc => doc.data());
         const increasedChPageCount = chapter.pages + 1;
-        await db.doc(`books/${bookId}/chapters/${chapterId}`).set({ pages: increasedChPageCount }, { merge: true });
+        await db.doc(`chapters/${chapterId}`).set({ pages: increasedChPageCount }, { merge: true });
     } catch (err) {
         throw (err);
     }
@@ -70,11 +70,9 @@ export const textExtraction = functions.storage
             const textRequest = await visionClient.documentTextDetection(imageUri);
             const fullText = textRequest[0].textAnnotations[0];
             const text = fullText ? fullText.description : null;
-            const deHyphenatedText = text.replace(/\n-/gm, '')
+            const deHyphenatedText = text.replace(/-\n/gm, '')
             console.log(text);
             console.log(deHyphenatedText);
-            console.log(fullText);
-            console.log(textRequest);
 
             // Construct the text-to-speech request
             const request = {

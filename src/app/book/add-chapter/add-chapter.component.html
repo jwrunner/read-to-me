@@ -1,14 +1,14 @@
-<div class="d-flex mb-2">
+<div class="d-flex mb-2 px-2">
   <mat-form-field style="flex-grow: 1;">
     <input matInput placeholder="Chapter Name" [(ngModel)]="chapterName" type="text" autocomplete="off" autocorrect="off"
       spellcheck="false" autofocus (keyup.enter)="addChapter()">
-      <mat-hint>1, 2, 3, Forward, Epilogue, etc...</mat-hint>
-    </mat-form-field>
-    
+    <mat-hint>1, 2, 3, Forward, Epilogue, etc...</mat-hint>
+  </mat-form-field>
+
 
   <div style="margin: 8px 0 0 6px;">
-      <button (click)="addChapter()" mat-raised-button color="accent" [disabled]="!chapterName">
-        <span *ngIf="!addingChapter else adding">
+    <button (click)="addChapter()" mat-raised-button color="accent" [disabled]="!chapterName">
+      <span *ngIf="!addingChapter else adding">
         Add
       </span>
       <ng-template #adding>Adding...</ng-template>

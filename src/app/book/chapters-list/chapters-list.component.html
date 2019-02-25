@@ -24,7 +24,7 @@
       </mat-list-item>
     </mat-nav-list>
 
-    <button mat-raised-button color="accent" (click)="addChapter = true" *ngIf="!addChapter && chapters.length" class="my-3">Add
+    <button mat-raised-button color="accent" (click)="addChapter = true" *ngIf="!addChapter && chapters.length" class="my-3 mx-2">Add
       Chapter</button>
 
     <rtm-add-chapter class="mt-2" *ngIf="!chapters.length || addChapter"></rtm-add-chapter>
