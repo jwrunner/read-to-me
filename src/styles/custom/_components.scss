@@ -1,16 +1,28 @@
-.rtm-card {
-  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12);
-  border-radius: 4px;
-  cursor: pointer;
-  background: #fff;
-  padding: 16px;
-  display: block;
-  color: black;
-  text-decoration: none;
+.custom-scrollbar {
+  @include min-width($lg) {
+    &::-webkit-scrollbar {
+      width: 12px;
+    }
 
-  &:hover {
-    background-color: #ededed;
+    &::-webkit-scrollbar-track {
+      background: 0 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #a9a9a9;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: #888;
+    }
   }
+}
+
+.overflow-x {
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: auto;
+
 }
 
 .centered-400-column {

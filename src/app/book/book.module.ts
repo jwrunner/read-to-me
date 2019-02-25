@@ -3,7 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
-import { MatButtonModule, MatFormFieldModule, MatInputModule, MatSnackBarModule, MatProgressBarModule, MatListModule, MatMenuModule, MatDialogModule } from '@angular/material';
+import {
+  MatButtonModule, MatFormFieldModule, MatInputModule,
+  MatSnackBarModule, MatProgressBarModule, MatListModule, MatMenuModule, MatDialogModule
+} from '@angular/material';
 
 import { BookRoutingModule } from './book-routing.module';
 import { BookService } from './_services/book.service';
@@ -11,7 +14,6 @@ import { BookService } from './_services/book.service';
 import { BooksHomeComponent } from './book-home/book-home.component';
 import { ChaptersListComponent } from './chapters-list/chapters-list.component';
 import { AddChapterComponent } from './add-chapter/add-chapter.component';
-import { ChapterCardComponent } from './chapter-card/chapter-card.component';
 import { ChapterHomeComponent } from './chapter-home/chapter-home.component';
 
 import { ScanComponent, PageNumberDialogComponent } from './scan/scan.component';
@@ -24,7 +26,6 @@ import { ClickStopPropagationDirective } from '../_directives/clickStopPropagati
     BooksHomeComponent,
     ChaptersListComponent,
     AddChapterComponent,
-    ChapterCardComponent,
     ChapterHomeComponent,
     DropZoneDirective,
     ScanComponent,

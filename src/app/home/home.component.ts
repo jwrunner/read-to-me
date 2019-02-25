@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../core/auth.service';
-import { Book } from '../_types/book.interface';
+import { IBook } from '../_types/book.interface';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import { map, switchMap } from 'rxjs/operators';
 })
 export class HomeComponent implements OnInit {
 
-  booksObservable: Observable<Book[]>;
+  booksObservable: Observable<IBook[]>;
   addBook = false;
   date = new Date();
 
@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
             ).snapshotChanges().pipe(
               map(arr => {
                 return arr.map(snap => {
-                  const data = snap.payload.doc.data() as Book;
+                  const data = snap.payload.doc.data() as IBook;
                   const id = snap.payload.doc.id;
                   return {
                     id, ...data

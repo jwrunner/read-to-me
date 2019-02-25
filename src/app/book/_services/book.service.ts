@@ -4,18 +4,19 @@ import { of, BehaviorSubject } from 'rxjs';
 import { switchMap, first } from 'rxjs/operators';
 
 import { RouterHelperService } from '../../_services/router-helper.service';
-import { Book } from 'src/app/_types/book.interface';
-import { Chapter } from 'src/app/_types/chapter.interface';
+import { IBook } from 'src/app/_types/book.interface';
+import { IChapter } from 'src/app/_types/chapter.interface';
 
 @Injectable()
 export class BookService {
 
     bookId: string;
-    private _book = new BehaviorSubject<Book>({ id: '...', title: '', ownerId: null, ownerName: '', dateCreated: null, pages: 0 });
+    private _book = new BehaviorSubject<IBook>({ id: '...', title: '', ownerId: null, ownerName: '', dateCreated: null, pages: 0 });
     currentBook = this._book.asObservable();
 
     chapterId: string;
-    private _chapter = new BehaviorSubject<Chapter>({ id: '', ownerId: null, ownerName: null, dateCreated: null, pages: 0 });
+    // tslint:disable-next-line:max-line-length
+    private _chapter = new BehaviorSubject<IChapter>({ name: null, ownerId: null, ownerName: null, bookId: null, dateCreated: null, pages: 0 });
     currentChapter = this._chapter.asObservable();
 
     constructor(
@@ -31,7 +32,7 @@ export class BookService {
             switchMap(bookId => {
                 if (bookId) {
                     this.bookId = bookId;
-                    return this.afs.doc<Book>(`books/${bookId}`).valueChanges();
+                    return this.afs.doc<IBook>(`books/${bookId}`).valueChanges();
                 } else {
                     return of(null);
                 }
@@ -49,23 +50,24 @@ export class BookService {
             switchMap(chapterId => {
                 if (chapterId) {
                     this.chapterId = chapterId;
-                    return this.afs.doc<Chapter>(`books/${this.bookId}/chapters/${chapterId}`).valueChanges();
+                    return this.afs.doc<IChapter>(`chapters/${chapterId}`).valueChanges();
                 } else {
                     return of(null);
                 }
             })
         ).subscribe(chapter => {
             if (chapter) {
+                chapter.id = this.chapterId;
                 this._chapter.next(chapter);
             }
         });
     }
 
-    getBook(): Promise<Book> {
+    getBook(): Promise<IBook> {
         return this.currentBook.pipe(first()).toPromise();
     }
 
-    getChapter(): Promise<Chapter> {
+    getChapter(): Promise<IChapter> {
         return this.currentChapter.pipe(first()).toPromise();
     }
 

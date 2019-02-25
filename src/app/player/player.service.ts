@@ -5,11 +5,13 @@ import assign from 'lodash/assign';
 import { BehaviorSubject } from 'rxjs';
 
 export class CurrentPage {
+  id?: string;
   bookId: string;
   bookTitle: string;
   chapterId: string;
-  id: string;
-  date: Date;
+  chapterName: string;
+  pageNumber: number;
+  dateCreated: number;
   text: string;
   audioPath: string;
   mt: string;
@@ -31,9 +33,9 @@ export class PlayerService {
 
   constructor() { }
 
-  setPage(page: IPage, bookTitle: string) {
+  setPage(page: IPage, bookTitle: string, chapterName: string) {
     this.clearPage();
-    const current = { bookTitle, ...page };
+    const current = { bookTitle, chapterName, ...page };
     this._currentPage.next(current);
   }
 

@@ -1,60 +1,49 @@
-<div class="audio-player d-flex flex-column" *ngIf="page?.id" [@fadeUpDownAnimation] [ngClass]="{'showing-text' : showText}">
-  <mat-progress-bar *ngIf="!showText" style="height: 8px; flex-shrink: 0" color="accent" mode="determinate" [value]="progress"></mat-progress-bar>
+<div class="audio-player d-flex flex-column" *ngIf="page?.pageNumber" [@fadeUpDownAnimation] [ngClass]="{'minimal-view' : minimal}">
+  <mat-progress-bar *ngIf="minimal" style="height: 8px; flex-shrink: 0" color="accent" mode="determinate" [value]="progress"></mat-progress-bar>
+
+  <div class="py-1 d-flex align-items-center">
+    <button *ngIf="minimal" mat-button (click)="minimal = false" style="min-width: 48px;">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+    <button *ngIf="!minimal" mat-button (click)="minimal = true" style="min-width: 48px;">
+      <i class="fas fa-arrow-down"></i>
+    </button>
+
+    <div class="truncate">
+      Pg {{page.pageNumber}} in
+      <a routerLink="/book/{{page.bookId}}" class="white-link">{{page.bookTitle}} really long title here, </a>
+      <a routerLink="/book/{{page.bookId}}/{{page.chapterId}}" class="white-link">Ch {{page.chapterName}}</a>
+    </div>
+
+    <button *ngIf="minimal" mat-button (click)="playerService.clearPage()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
   <div class="d-flex py-2" style="align-items: center; justify-content: space-between;">
-    <div class="p-2 small text-center hidden-xs-down">
-      <a routerLink="/" class="white-link">{{page.bookTitle}}: </a>
-      <a routerLink="/" class="white-link">Chapter {{page.chapterId}}</a>,
-      Page {{page.id}}
-    </div>
-
-    <div>
-      <button mat-button *ngIf="chapterPages && !firstPage" (click)="prevPage()">
-        <i class="fas fa-angle-left"></i>
-      </button>
-      <button mat-button (click)="rewind30()">
-        -30
-      </button>
-      <button mat-button (click)="unPause()" *ngIf="!playing">
-        <i class="fas fa-play-circle fa-2x"></i>
-      </button>
-      <button mat-button (click)="pause()" *ngIf="playing">
-        <i class="fas fa-pause-circle fa-2x"></i>
-      </button>
-      <button mat-button (click)="fastForward30()">
-        +30
-      </button>
-      <button mat-button *ngIf="chapterPages && !lastPage" (click)="nextPage()">
-        <i class="fas fa-angle-right"></i>
-      </button>
-    </div>
-
-    <div>
-      <button *ngIf="!showText" mat-button (click)="showText = true">
-        <i class="fas fa-align-left"></i>
-      </button>
-
-      <button *ngIf="showText" mat-button (click)="showText = false">
-        <i class="fas fa-arrow-down"></i>
-      </button>
-
-      <button *ngIf="!showText" mat-button (click)="playerService.clearPage()">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
+    <button mat-button [disabled]="!chapterPages || firstPage" (click)="prevPage()">
+      <i class="fas fa-angle-left"></i>
+    </button>
+    <button mat-button (click)="rewind30()">
+      -30
+    </button>
+    <button mat-button (click)="unPause()" *ngIf="!playing">
+      <i class="fas fa-play-circle fa-2x"></i>
+    </button>
+    <button mat-button (click)="pause()" *ngIf="playing">
+      <i class="fas fa-pause-circle fa-2x"></i>
+    </button>
+    <button mat-button (click)="fastForward30()">
+      +30
+    </button>
+    <button mat-button [disabled]="!chapterPages || lastPage" (click)="nextPage()">
+      <i class="fas fa-angle-right"></i>
+    </button>
   </div>
 
-  <div class="p-2 small hidden-sm-up">
-    <a routerLink="/" class="white-link">{{page.bookTitle}}: </a>
-    <a routerLink="/" class="white-link">Ch {{page.chapterId}}</a>,
-    Pg {{page.id}}
-  </div>
+  <mat-progress-bar *ngIf="!minimal" style="height: 8px; flex-shrink: 0" color="accent" mode="determinate" [value]="progress"></mat-progress-bar>
 
-  <mat-progress-bar *ngIf="showText" style="height: 8px; flex-shrink: 0" color="accent" mode="determinate" [value]="progress"></mat-progress-bar>
-
-  <div class="page-text p-2" *ngIf="showText">
-    <!-- <pre>
-      {{chapterPages | json}}
-    </pre> -->
+  <div class="page-text p-2" *ngIf="!minimal">
     {{page.text}}
   </div>
 </div>

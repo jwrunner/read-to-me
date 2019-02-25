@@ -1,6 +1,6 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AngularFireUploadTask, AngularFireStorage } from '@angular/fire/storage';
-import { MatSnackBar, MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { MatSnackBar, MatDialogRef, MatDialog } from '@angular/material';
 import { Observable } from 'rxjs';
 
 import { AuthService } from 'src/app/core/auth.service';

@@ -40,9 +40,9 @@ async function increasePageCount(bookId: string, chapterId: string) {
         const increasedBkPageCount = book.pages + 1;
         await db.doc(`books/${bookId}`).set({ pages: increasedBkPageCount }, { merge: true });
         
-        const chapter = await db.doc(`books/${bookId}/chapters/${chapterId}`).get().then(doc => doc.data());
+        const chapter = await db.doc(`chapters/${chapterId}`).get().then(doc => doc.data());
         const increasedChPageCount = chapter.pages + 1;
-        await db.doc(`books/${bookId}/chapters/${chapterId}`).set({ pages: increasedChPageCount }, { merge: true });
+        await db.doc(`chapters/${chapterId}`).set({ pages: increasedChPageCount }, { merge: true });
     } catch (err) {
         throw (err);
     }
@@ -109,13 +109,13 @@ export const textExtraction = functions.storage
             // Save Text to Firestore
             const bookId = pageName.match(/^BK(.+)_CH/)[1];
             const chapterId = pageName.match(/_CH(.+)_PG/)[1];
-            const page = pageName.match(/_PG(.+)_/)[1];
+            const pageNumber = +pageName.match(/_PG(.+)_/)[1];
             const audioPath = `audio/${audioName}`;
-            const date = new Date().getTime(); // TODO: Use Moment.js or Firebase
-            const pageData = { text, bookId, chapterId, id: page, date, audioPath, mt: uuid }
+            const dateCreated = Date.now();
+            const pageData = { text, bookId, chapterId, pageNumber, dateCreated, audioPath, mt: uuid }
 
-            const docRef = db.doc(`books/${bookId}/chapters/${chapterId}/pages/${page}`);
-            await docRef.set(pageData)
+            const docRef = db.collection('pages');
+            await docRef.add(pageData);
 
             await increasePageCount(bookId, chapterId);
 

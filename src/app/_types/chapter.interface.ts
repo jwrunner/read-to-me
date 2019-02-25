@@ -1,9 +1,10 @@
-export interface Chapter {
-    id: string; // Prologue, 1, 2, 3, Epilogue, etc...
-    title?: string;
+export interface IChapter {
+    id?: string;
+    name: string; // Prologue, 1, 2, 3, Epilogue, etc...
     ownerId: string;
     ownerName: string;
-    dateCreated: any; // FieldValue; // import { FieldValue } from '@google-cloud/firestore';
+    bookId: string;
+    dateCreated: number;
     pages: number;
     // estimatedMinutes: number;
     listened?: boolean;

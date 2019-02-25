@@ -5,6 +5,7 @@ import { IPage } from 'src/app/_types/page.interface';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { RouterHelperService } from '../../_services/router-helper.service';
 import { PlayerService } from 'src/app/player/player.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'rtm-chapter-home',
@@ -29,15 +30,29 @@ export class ChapterHomeComponent implements OnInit {
 
   async setPage(page: IPage) {
     const { title } = await this.bookService.getBook();
-    this.playerService.setPage(page, title);
+    const { name } = await this.bookService.getChapter();
+    this.playerService.setPage(page, title, name);
   }
 
   private async getPages() {
     const bookId = await this.routerHelper.getBookId();
     const chapterId = await this.routerHelper.getChapterId();
     // tslint:disable-next-line:max-line-length
-    this.pagesSubscription = this.afs.collection<IPage>(`books/${bookId}/chapters/${chapterId}/pages`, ref => ref.orderBy('id'))
-      .valueChanges().subscribe(pages => {
+    this.pagesSubscription = this.afs.collection<IPage>('pages', ref =>
+      ref.where('bookId', '==', bookId)
+        .where('chapterId', '==', chapterId)
+        .orderBy('pageNumber'))
+      .snapshotChanges().pipe(
+        map(arr => {
+          return arr.map(snap => {
+            const data = snap.payload.doc.data() as IPage;
+            const id = snap.payload.doc.id;
+            return {
+              id, ...data
+            };
+          });
+        })
+      ).subscribe(pages => {
         this.pages = pages;
       });
   }
