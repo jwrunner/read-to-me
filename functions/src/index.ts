@@ -71,8 +71,6 @@ export const textExtraction = functions.storage
             const fullText = textRequest[0].textAnnotations[0];
             const text = fullText ? fullText.description : null;
             const deHyphenatedText = text.replace(/-\n/gm, '')
-            console.log(text);
-            console.log(deHyphenatedText);
 
             // Construct the text-to-speech request
             const request = {
