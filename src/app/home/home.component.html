@@ -24,8 +24,8 @@
             </mat-list-item>
           </mat-nav-list>
 
-          <button mat-raised-button color="accent" (click)="addBook = true"
-            *ngIf="!addBook && books.length && books.length < 11" class="m-2">Add Book</button>
+          <button mat-raised-button color="accent" (click)="addBook = true" *ngIf="!addBook && books.length && books.length < 11"
+            class="m-2">Add Book</button>
           <!-- <button mat-fab color="accent" (click)="addBook = true" *ngIf="!addBook && books.length && books.length < 11"
             matTooltip="Add Book"><i class="fas fa-plus mr-1"></i><i class="fas fa-book"></i></button> -->
 
@@ -44,9 +44,11 @@
         Let your phone read to you by taking pictures of pages. Login to get started.
       </div>
 
-      <button mat-raised-button (click)="auth.googleLogin()" style="color: #dd4b39;">
-        <i class="fab fa-google mr-2" style="vertical-align: 0;"></i> Login with Google
-      </button>
+      <div class="text-center">
+        <button mat-raised-button (click)="auth.googleLogin()" style="color: #dd4b39;">
+          <i class="fab fa-google mr-2" style="vertical-align: 0;"></i> Login with Google
+        </button>
+      </div>
     </ng-template>
   </div>
 
