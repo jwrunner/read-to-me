@@ -22,6 +22,8 @@ jobs:
         - npm install -g @angular/cli
       script:
         - ng build --prod # Deploy production app to dev server to force minification and service worker (need to figure out how to get service to work in dev app but not localhost. I may need to create a third (staging project))
+        - npm link
+        - patch-safari-sw
         # - python weigh_in.py dist/main.js
         # curl -H "Authorization: token ${GITHUB_TOKEN}" -X POST \
         # -d "{\"body\": \"Hello world\"}" \
