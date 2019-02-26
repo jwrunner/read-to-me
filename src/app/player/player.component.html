@@ -11,7 +11,8 @@
 
     <div class="truncate">
       Pg {{page.pageNumber}} in
-      <a routerLink="/book/{{page.bookId}}" class="white-link">{{page.bookTitle}} really long title here, </a>
+      <a routerLink="/book/{{page.bookId}}" class="white-link">{{page.bookTitle}}, </a>
+      <!-- TODO: Make a chapter pipe -->
       <a routerLink="/book/{{page.bookId}}/{{page.chapterId}}" class="white-link">Ch {{page.chapterName}}</a>
     </div>
 
