@@ -1,0 +1,10 @@
+<div mat-dialog-content>
+  <p>Set page number:</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="writeInNumber" type="number" cdkFocusInitial>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="writeInNumber" [disabled]="!writeInNumber">Set</button>
+</div>
