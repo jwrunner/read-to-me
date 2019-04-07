@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { PageNumberDialogComponent } from './page-number-dialog/page-number-dialog.component';
 import { IQueuedPage } from 'src/app/_types/queued-page.interface';
+import { RouterHelperService } from 'src/app/_services/router-helper.service';
 
 @Component({
   selector: 'rtm-uploader',
@@ -17,10 +18,23 @@ export class UploaderComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
+    private routerHelperService: RouterHelperService,
   ) { }
 
   ngOnInit() {
-    // TODO: get last page scanned in this book (save as value on book doc)
+    this.getPageNumber();
+  }
+
+  private async getPageNumber() {
+    const bookId = await this.routerHelperService.getBookId();
+    if (localStorage.getItem(`${bookId}-currentPage`)) {
+      this.pageNumber = +localStorage.getItem(`${bookId}-currentPage`);
+    }
+  }
+
+  private async setPageNumber() {
+    const bookId = await this.routerHelperService.getBookId();
+    localStorage.setItem(`${bookId}-currentPage`, this.pageNumber.toString());
   }
 
   toggleHover(event: boolean) {
@@ -36,10 +50,12 @@ export class UploaderComponent implements OnInit {
 
   increasePageNumber() {
     this.pageNumber++;
+    this.setPageNumber();
   }
 
   decreasePageNumber() {
     this.pageNumber--;
+    this.setPageNumber();
   }
 
   writeInPageNumber() {
@@ -48,6 +64,7 @@ export class UploaderComponent implements OnInit {
     dialogRef.afterClosed().subscribe(returnedNumber => {
       if (returnedNumber) {
         this.pageNumber = returnedNumber;
+        this.setPageNumber();
       }
     });
   }
