@@ -1,3 +1,4 @@
+// Angular
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,18 +9,22 @@ import {
   MatSnackBarModule, MatProgressBarModule, MatListModule, MatMenuModule, MatDialogModule
 } from '@angular/material';
 
+// App Misc
 import { BookRoutingModule } from './book-routing.module';
 import { BookService } from './_services/book.service';
+import { PrefixChapterNumberPipe } from '../_pipes/prefix-chapter-number.pipe';
+import { ClickStopPropagationDirective } from '../_directives/clickStopPropagation.directive';
+import { DropZoneDirective } from '../_directives/drop-zone.directive';
 
+// Components
 import { BooksHomeComponent } from './book-home/book-home.component';
 import { ChaptersListComponent } from './chapters-list/chapters-list.component';
 import { AddChapterComponent } from './add-chapter/add-chapter.component';
 import { ChapterHomeComponent } from './chapter-home/chapter-home.component';
+import { UploaderComponent } from './uploader/uploader.component';
+import { UploadTaskComponent } from './uploader/upload-task/upload-task.component';
+import { PageNumberDialogComponent } from './uploader/page-number-dialog/page-number-dialog.component';
 
-import { ScanComponent, PageNumberDialogComponent } from './scan/scan.component';
-import { DropZoneDirective } from './scan/drop-zone.directive';
-import { PrefixChapterNumberPipe } from '../_pipes/prefix-chapter-number.pipe';
-import { ClickStopPropagationDirective } from '../_directives/clickStopPropagation.directive';
 
 @NgModule({
   declarations: [
@@ -28,10 +33,11 @@ import { ClickStopPropagationDirective } from '../_directives/clickStopPropagati
     AddChapterComponent,
     ChapterHomeComponent,
     DropZoneDirective,
-    ScanComponent,
     PrefixChapterNumberPipe,
     ClickStopPropagationDirective,
     PageNumberDialogComponent,
+    UploaderComponent,
+    UploadTaskComponent,
   ],
   imports: [
     CommonModule,

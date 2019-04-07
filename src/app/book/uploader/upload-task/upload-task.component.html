@@ -1,0 +1,14 @@
+<div style="color: red;" *ngIf="errorUploading">Error on Page {{ queuedPage.pageNumber }}: {{errorUploading}}</div>
+
+<div *ngIf="percentage | async as pct" style="width: 100%;"
+  title="{{ queuedPage.file.name }}, {{ queuedPage.file.lastModified | date: 'medium' }}">
+  <div>
+    <span *ngIf="!uploadComplete">Uploading</span>
+    Page {{ queuedPage.pageNumber }}
+    <span *ngIf="!uploadComplete && !errorUploading">{{ pct | number }}%</span>
+    <span *ngIf="uploadComplete">Uploaded</span>
+  </div>
+
+  <mat-progress-bar [value]="pct" class="pt-1" style="height: 5px;" color="accent" mode="determinate">
+  </mat-progress-bar>
+</div>
