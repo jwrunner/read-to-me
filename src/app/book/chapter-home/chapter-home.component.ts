@@ -1,26 +1,29 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { BookService } from '../_services/book.service';
-import { Subscription } from 'rxjs';
-import { IPage } from 'src/app/_types/page.interface';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { RouterHelperService } from '../../_services/router-helper.service';
 import { PlayerService } from 'src/app/player/player.service';
-import { map } from 'rxjs/operators';
+import { RxfirestoreAuthService } from '@r2m-common/services/rxfirestore-auth.service';
+import { IPage } from '@r2m-common/interfaces/page.interface';
+import { RouterHelperService } from '@r2m-common/services/router-helper.service';
+import { faArrowLeft, faPlay } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'rtm-chapter-home',
+  selector: 'r2m-chapter-home',
   templateUrl: './chapter-home.component.html',
   styleUrls: ['./chapter-home.component.scss']
 })
 export class ChapterHomeComponent implements OnInit {
 
+  faArrowLeft = faArrowLeft;
+  faPlay = faPlay;
+
   pages: IPage[];
-  pagesSubscription: Subscription;
+  pages$: Observable<IPage[]>;
 
   constructor(
     public bookService: BookService,
     private routerHelper: RouterHelperService,
-    private afs: AngularFirestore,
+    private db: RxfirestoreAuthService,
     public playerService: PlayerService,
   ) { }
 
@@ -37,24 +40,9 @@ export class ChapterHomeComponent implements OnInit {
   private async getPages() {
     const bookId = await this.routerHelper.getBookId();
     const chapterId = await this.routerHelper.getChapterId();
-    // tslint:disable-next-line:max-line-length
-    this.pagesSubscription = this.afs.collection<IPage>('pages', ref =>
-      ref.where('bookId', '==', bookId)
-        .where('chapterId', '==', chapterId)
-        .orderBy('pageNumber'))
-      .snapshotChanges().pipe(
-        map(arr => {
-          return arr.map(snap => {
-            const data = snap.payload.doc.data() as IPage;
-            const id = snap.payload.doc.id;
-            return {
-              id, ...data
-            };
-          });
-        })
-      ).subscribe(pages => {
-        this.pages = pages;
-      });
+    this.pages$ = this.db.col$<IPage>(`books/${bookId}/chapters/${chapterId}/pages`, {
+      orderBy: { value: 'pageNumber' }
+    });
   }
 
   async deletePage(pageId: any) {

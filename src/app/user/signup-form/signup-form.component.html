@@ -1,0 +1,78 @@
+<div class="mt-5 mb-3 mx-auto p-2" style="max-width: 400px;">
+  <button class="mb-3" mat-raised-button (click)="googleLogin()"
+    style="background-color: #dd4b39; color: white; width: 100%;">
+    <fa-icon [icon]="faGoogle" transform="up-2" class="mr-2"></fa-icon>
+    <span i18n="@@signUpWithGoogle"> Sign Up with Google</span>
+  </button>
+
+
+  <!-- <button class="mb-3" mat-raised-button (click)="facebookLogin()" style="background-color: #3b5998; color: white; width: 100%;" i18n="@@signUpWithFacebook">
+       <fa-icon [icon]="faFacebook" transform="up-2" class="mr-2"></fa-icon>
+       Sign Up with Facebook
+  </button> -->
+
+  <hr />
+
+  <form [formGroup]="signupForm" (ngSubmit)="signup()">
+
+    <h3 class="mb-2" i18n="@@signUpWithEmail">Sign Up with Email</h3>
+    <div class="mb-3">
+      <mat-form-field class="form-field--full-width">
+        <input matInput type="text" i18n-placeholder="@@yourName" placeholder="Your Name" formControlName="name" name="name" autocomplete="name"
+          required>
+        <mat-error *ngIf="formErrors.name">{{ formErrors.name }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="mb-3">
+      <mat-form-field class="form-field--full-width">
+        <input matInput type="email" i18n-placeholder="@@email" placeholder="Email" formControlName="email" name="email"
+          autocomplete="username email" required>
+        <mat-error *ngIf="formErrors.email">{{ formErrors.email }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="mb-3">
+      <mat-form-field class="form-field--full-width">
+        <input matInput type="password" i18n-placeholder="@@password" placeholder="Password" formControlName="password" name="password"
+          autocomplete="new-password" required>
+        <mat-hint>
+          <fa-icon [icon]="faCheck" *ngIf="signupForm.controls.password.valid"></fa-icon>
+          <span i18n="@@passwordRequirements"> 8 character minimum, with at least 1 letter and 1 number</span>
+        </mat-hint>
+        <mat-error *ngIf="formErrors.password">{{ formErrors.password }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="mb-3">
+      <mat-form-field class="form-field--full-width">
+        <input matInput type="password" i18n-placeholder="@@confirmPassword" placeholder="Confirm Password" formControlName="confirmPassword"
+          name="confirmPassword" autocomplete="new-password" required>
+        <mat-hint *ngIf="signupForm.value['confirmPassword']">
+          <fa-icon [icon]="faCheck" *ngIf="signupForm.value['password'] === signupForm.value['confirmPassword']">
+          </fa-icon>
+
+          <span *ngIf="signupForm.value['password'] != signupForm.value['confirmPassword'] else pMatch"
+            i18n="@@passwordsNoMatch">Passwords don't match</span>
+          <ng-template #pMatch i18n="@@passwordsMatch">
+            Passwords match
+          </ng-template>
+        </mat-hint>
+        <mat-error *ngIf="formErrors.confirmPassword">{{ formErrors.confirmPassword }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <button mat-raised-button color="primary" type="submit"
+      [disabled]="!signupForm.valid || (signupForm.value['password'] != signupForm.value['confirmPassword'])"
+      i18n="@@createAccount">Create
+      Account</button>
+
+  </form>
+
+  <hr class="mt-4">
+  <span i18n="@@alreadyAccount">
+    Already have an account?
+  </span>
+
+  <a mat-button routerLink="/user/login" i18n="@@logIn">Log In</a>
+</div>

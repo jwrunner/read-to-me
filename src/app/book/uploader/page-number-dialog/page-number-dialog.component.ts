@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 
 @Component({
-  selector: 'rtm-page-number-dialog',
+  selector: 'r2m-page-number-dialog',
   templateUrl: './page-number-dialog.component.html',
   styleUrls: ['./page-number-dialog.component.scss']
 })

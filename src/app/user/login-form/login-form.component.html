@@ -1,0 +1,53 @@
+<div class="mt-5 mb-3 mx-auto p-2" style="max-width: 400px;">
+  <button class="mb-3" mat-raised-button (click)="googleLogin()"
+    style="background-color: #dd4b39; color: white; width: 100%;">
+    <fa-icon [icon]="faGoogle" transform="up-2" class="mr-2"></fa-icon>
+    <span i18n="@@logInWithGoogle">Log In with Google</span>
+  </button>
+
+  <!-- <button class="mb-3" mat-raised-button (click)="facebookLogin()" style="background-color: #3b5998; color: white; width: 100%;" i18n="@@logInWithFacebook">
+        <fa-icon [icon]="faFacebook" transform="up-2" class="mr-2"></fa-icon>
+        Log In with Facebook
+      </button> -->
+
+  <hr />
+
+  <form [formGroup]="loginForm" (ngSubmit)="login()">
+
+    <h3 class="mb-2" i18n="@@logInWithEmail">Log In with Email</h3>
+
+    <div class="mb-3">
+      <mat-form-field class="form-field--full-width">
+        <input matInput type="email" i18n-placeholder="@@email" placeholder="Email" formControlName="email" name="email" autocomplete="email"
+          required>
+        <mat-error *ngIf="formErrors.email">{{ formErrors.email }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="mb-3">
+      <mat-form-field class="form-field--full-width">
+        <input matInput type="password" i18n-placeholder="@@password" placeholder="Password" formControlName="password" name="password"
+          autocomplete="current-password" required>
+        <mat-hint *ngIf="loginForm.value['password']" i18n="@@passwordRequirements"> 8 character minimum, with at least
+          1 letter and 1 number</mat-hint>
+        <mat-error *ngIf="formErrors.password">{{ formErrors.password }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="mb-2 d-flex flex-wrap">
+      <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid" i18n="@@logIn">Log
+        In</button>
+      <div class="flex-grow-1"></div>
+      <button type="button" mat-button *ngIf="loginForm.controls.email.valid" (click)="resetPassword()"><span
+          i18n="@@resetPasswordFor">Reset
+          Password for</span> {{loginForm.value.email}}?</button>
+    </div>
+  </form>
+
+  <hr class="mt-4">
+  <span i18n="@@noAccountQuestion">
+    Don't have an account?
+  </span>
+
+  <a mat-button routerLink="/user/signup" i18n="@@signUp">Sign Up</a>
+</div>

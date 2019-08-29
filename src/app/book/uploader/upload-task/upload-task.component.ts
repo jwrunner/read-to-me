@@ -1,14 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { AngularFireUploadTask, AngularFireStorage } from '@angular/fire/storage';
 import { MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { IQueuedPage } from 'src/app/_types/queued-page.interface';
-import { BookService } from '../../_services/book.service';
-import { AuthService } from 'src/app/core/auth.service';
+import { RxfirestoreAuthService } from '@r2m-common/services/rxfirestore-auth.service';
+import { IQueuedPage } from '@r2m-common/interfaces/queued-page.interface';
+import { RouterHelperService } from '@r2m-common/services/router-helper.service';
 
 @Component({
-  selector: 'rtm-upload-task',
+  selector: 'r2m-upload-task',
   templateUrl: './upload-task.component.html',
   styleUrls: ['./upload-task.component.scss']
 })
@@ -17,18 +17,15 @@ export class UploadTaskComponent implements OnInit {
   @Input() queuedPage: IQueuedPage;
   @Output() removeFile = new EventEmitter<any>();
 
-  task: AngularFireUploadTask;
   percentage: Observable<number>;
-  downloadURL: Observable<string>;
 
   uploadComplete = false;
   errorUploading: string;
 
   constructor(
-    private storage: AngularFireStorage,
     private snackBar: MatSnackBar,
-    private bookService: BookService,
-    private auth: AuthService,
+    private routerHelper: RouterHelperService,
+    private db: RxfirestoreAuthService,
   ) { }
 
   ngOnInit() {
@@ -47,18 +44,19 @@ export class UploadTaskComponent implements OnInit {
       return this.removeFileFromQueue();
     }
 
-    const book = await this.bookService.getBook();
-    // const bookTitle = book.title.replace(/[^a-z0-9+]+/gi, '_');
-    const chapter = await this.bookService.getChapter();
-    const path = `scans/BK${book.id}_CH${chapter.id}_PG${this.queuedPage.pageNumber}_${new Date().getTime()}`;
+    const bookId = await this.routerHelper.getBookId();
+    const chapterId = await this.routerHelper.getChapterId();
+    const storagePath = `scans/${bookId}/${chapterId}/${this.queuedPage.pageNumber}_${new Date().getTime()}`;
 
-    const { uid } = await this.auth.getUser();
-    const customMetadata = { uid: uid };
+    const { displayName, uid } = await this.db.getUser();
+    const customMetadata = { uploadedBy: displayName, uid };
 
-    this.task = this.storage.upload(path, this.queuedPage.file, { customMetadata });
-    this.percentage = this.task.percentageChanges();
+    const firebase = await import('firebase/app');
+    const storage = await import('firebase/storage');
+    const rxStorage = await import('rxfire/storage');
 
-    this.task.then(snap => {
+    const task = firebase.storage().ref(storagePath).put(this.queuedPage.file, { customMetadata });
+    task.then(snap => {
       if (snap.state === 'success') {
         if (localStorage.getItem('user-knows-to-wait')) {
           this.snackBar.open(`Page ${this.queuedPage.pageNumber} uploaded.`, '', { duration: 1000, verticalPosition: 'top' });
@@ -74,6 +72,13 @@ export class UploadTaskComponent implements OnInit {
       this.errorUploading = 'Image Upload Failed';
       this.removeFileFromQueue();
     });
+
+
+    this.percentage = rxStorage.percentage(task).pipe(
+      map(action => {
+        return action.progress;
+      })
+    );
   }
 
   private removeFileFromQueue() {

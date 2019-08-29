@@ -1,17 +1,17 @@
-@import '../../styles/titanium/dependencies';
+@import 'dependencies';
 
 .audio-player {
   position: fixed;
   top: 0;
   bottom: 0;
   width: 100%;
-  background: $rtm-primary;
+  background: $r2m-primary;
   color: white;
   box-shadow: 0 -1px 6px rgba(0, 0, 0, .35);
+  z-index: 101;
 
   &.minimal-view {
     top: unset;
-    position: initial;
     // transition: all .2s ease-in-out;
   }
 }

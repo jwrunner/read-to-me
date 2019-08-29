@@ -1,18 +1,27 @@
-<mat-nav-list class="pt-0" rtmDropZone (hovered)="toggleHover($event)" (dropped)="onDrop($event)" [class.hovering]="isHovering">
+<mat-nav-list class="pt-0" r2mDropZone (hovered)="toggleHover($event)" (dropped)="onDrop($event)"
+  [class.hovering]="isHovering">
   <mat-list-item>
     <label matLine style="height: 48px; line-height: 48px;" class="pointer">
       <input style="display: none;" type="file" multiple (change)="onDrop($event.target.files)">
-      <i class="fas fa-plus text-muted ml-1 mr-3" style="font-size: 1rem; width: 1rem; height: 1rem;"></i>
+      <fa-icon [icon]="faPlus" class="text-muted ml-1 mr-3" style="font-size: 1rem; width: 1rem; height: 1rem;">
+      </fa-icon>
       Scan Page <b>{{pageNumber}}</b>
     </label>
-    <button mat-icon-button rtmClickStopPropagation (click)="increasePageNumber()"><i class="fas fa-chevron-up"></i></button>
-    <button mat-icon-button rtmClickStopPropagation (click)="decreasePageNumber()"><i class="fas fa-chevron-down"></i></button>
-    <button mat-icon-button rtmClickStopPropagation (click)="writeInPageNumber()"><i class="fas fa-edit"></i></button>
+    <button mat-icon-button r2mClickStopPropagation (click)="increasePageNumber()">
+      <fa-icon [icon]="faChevronUp"></fa-icon>
+    </button>
+    <button mat-icon-button r2mClickStopPropagation (click)="decreasePageNumber()">
+      <fa-icon [icon]="faChevronDown"></fa-icon>
+    </button>
+    <button mat-icon-button r2mClickStopPropagation (click)="writeInPageNumber()">
+      <fa-icon [icon]="faEdit"></fa-icon>
+    </button>
   </mat-list-item>
 </mat-nav-list>
 
 <mat-nav-list>
-  <mat-list-item  *ngFor="let queuedPage of queuedPages; let i=index">
-    <rtm-upload-task [queuedPage]="queuedPage" (removeFile)="removeFileFromQueue(i)" style="width: 100%;"></rtm-upload-task>
+  <mat-list-item *ngFor="let queuedPage of queuedPages; let i=index">
+    <r2m-upload-task [queuedPage]="queuedPage" (removeFile)="removeFileFromQueue(i)" style="width: 100%;">
+    </r2m-upload-task>
   </mat-list-item>
 </mat-nav-list>

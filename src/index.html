@@ -7,7 +7,17 @@
   <title>Read 2 Me</title>
   <meta name="description" content="Web app used to listen to scanned book pages" />
 
-  <link rel="manifest" href="manifest.json">
+  <meta name="application-name" content="Read 2 Me">
+  <meta property="og:site_name" content="Read 2 Me">
+  <meta property="og:locale" content="en">
+  <meta property="og:title" content="Read 2 Me">
+  <meta property="og:description" content="Web app used to listen to scanned book pages">
+  <!-- <meta property="og:image" content="https://angularexampleapp.com/assets/images/og.jpg">
+  <meta property="og:image:secure_url" content="https://angularexampleapp.com/assets/images/og.jpg">
+  <meta property="og:image:type" content="image/jpg"> -->
+  <meta property="og:url" content="https://r2m.app">
+
+  <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#546e7a">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="mobile-web-app-capable" content="yes">
@@ -17,59 +27,79 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <!-- <link rel="apple-touch-startup-image" href="/assets/icons/apple-touch-startup-image.png"> -->
-  <link href="/assets/icons/iOS_splashscreens/iphone5_splash.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
+  <link href="/assets/icons/iOS_splashscreens/iphone5_splash.png"
+    media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
     rel="apple-touch-startup-image" />
-  <link href="/assets/icons/iOS_splashscreens/iphone6_splash.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
+  <link href="/assets/icons/iOS_splashscreens/iphone6_splash.png"
+    media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
     rel="apple-touch-startup-image" />
-  <link href="/assets/icons/iOS_splashscreens/iphoneplus_splash.png" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)"
+  <link href="/assets/icons/iOS_splashscreens/iphoneplus_splash.png"
+    media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)"
     rel="apple-touch-startup-image" />
-  <link href="/assets/icons/iOS_splashscreens/iphonex_splash.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
+  <link href="/assets/icons/iOS_splashscreens/iphonex_splash.png"
+    media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
     rel="apple-touch-startup-image" />
-  <link href="/assets/icons/iOS_splashscreens/iphonexr_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)"
+  <link href="/assets/icons/iOS_splashscreens/iphonexr_splash.png"
+    media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)"
     rel="apple-touch-startup-image" />
-  <link href="/assets/icons/iOS_splashscreens/iphonexsmax_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)"
+  <link href="/assets/icons/iOS_splashscreens/iphonexsmax_splash.png"
+    media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)"
     rel="apple-touch-startup-image" />
-  <link href="/assets/icons/iOS_splashscreens/ipad_splash.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)"
+  <link href="/assets/icons/iOS_splashscreens/ipad_splash.png"
+    media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)"
     rel="apple-touch-startup-image" />
-  <link href="/assets/icons/iOS_splashscreens/ipadpro1_splash.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
+  <link href="/assets/icons/iOS_splashscreens/ipadpro1_splash.png"
+    media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
     rel="apple-touch-startup-image" />
-  <link href="/assets/icons/iOS_splashscreens/ipadpro3_splash.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)"
+  <link href="/assets/icons/iOS_splashscreens/ipadpro3_splash.png"
+    media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)"
     rel="apple-touch-startup-image" />
-  <link href="/assets/icons/iOS_splashscreens/ipadpro2_splash.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
+  <link href="/assets/icons/iOS_splashscreens/ipadpro2_splash.png"
+    media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
     rel="apple-touch-startup-image" />
 
   <meta name="msapplication-starturl" content="/">
 
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
-    crossorigin="anonymous">
+  <style>
+    body,
+    html {
+      height: 100%;
+    }
+
+    body {
+      box-sizing: border-box;
+      padding-top: 56px;
+      margin: 0;
+      font-family: 'Noto Sans', Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+      font-weight: 400;
+      line-height: 20px;
+      background-color: #eceff1;
+    }
+  </style>
+
+  <script>
+    WebFontConfig = {
+      events: false,
+      google: { families: ['Noto+Sans:400,700&display=swap&subset=cyrillic,devanagari'] },
+    };
+
+    (function (d) {
+      var wf = d.createElement('script'), s = d.scripts[0];
+      wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
+      wf.async = true;
+      s.parentNode.insertBefore(wf, s);
+    })(document);
+  </script>
 </head>
 
 <body>
-  <rtm-root>
-    <div style="background: #546e7a; color: white; height: 56px; padding-left: 8px; font-size: 1.17em; line-height: 56px;">
+  <r2m-root>
+    <div
+      style="background: #546e7a; color: white; height: 56px; position: fixed; top: 0; width: 100%; padding-left: 8px; font-size: 1.17em; line-height: 56px;">
       Loading...
     </div>
-  </rtm-root>
+  </r2m-root>
   <noscript>Please enable JavaScript to continue using this application.</noscript>
-
-  <noscript id="deferred-styles">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans:300,400,500">
-  </noscript>
-  <script>
-    var loadDeferredStyles = function () {
-      var addStylesNode = document.getElementById("deferred-styles");
-      var replacement = document.createElement("div");
-      replacement.innerHTML = addStylesNode.textContent;
-      document.body.appendChild(replacement)
-      addStylesNode.parentElement.removeChild(addStylesNode);
-    };
-    var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-      window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-    if (raf) raf(function () {
-      window.setTimeout(loadDeferredStyles, 0);
-    });
-    else window.addEventListener('load', loadDeferredStyles);
-  </script>
 
   <script>
     // From browser-update.org
@@ -91,11 +121,21 @@
       document.body.appendChild(e);
     };
     try {
-      document.addEventListener("DOMContentLoaded", $buo_f, false)
+      window.addEventListener("load", $buo_f, false)
     } catch (e) {
       window.attachEvent("onload", $buo_f)
     }
   </script>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146672926-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-146672926-1');
+  </script>
+
 </body>
 
 </html>

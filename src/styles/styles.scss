@@ -1,5 +1,15 @@
-// Shared Titanium SCSS package (which depends upon custom/colors)
-@import 'titanium/titanium';
+@import 'normalize';
+
+@import 'dependencies'; // includes color & breakpoints, must come first
+@import 'theme';
+
+@import 'shell';
+
+// Utilities
+@import 'text';
+@import 'flex';
+@import 'margin-padding';
+@import 'visibility';
 
 // Custom
-@import 'custom/components';
+@import 'components';

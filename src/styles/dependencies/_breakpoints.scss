@@ -1,0 +1,31 @@
+// Grid breakpoints
+//
+// Define the minimum dimensions at which your layout will change,
+// adapting to different screen sizes, for use in media queries.
+
+// $grid-breakpoints: (
+//   xs: 0,
+//   sm: 576px,
+//   md: 768px,
+//   lg: 992px,
+//   xl: 1200px
+// );
+
+$xs: 0;
+$sm: 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1200px;
+
+@mixin min-width($screen-breakpoint: $sm) { //$screen-sm-min is the default if no breakpoint is declared when mixin is called.
+    @media screen and (min-width: $screen-breakpoint) {
+        @content;
+    }
+}
+
+
+@mixin max-width($screen-breakpoint: $sm) {
+    @media screen and (max-width: $screen-breakpoint - 1) { // Minus 1 so media queries don't overlap.
+        @content;
+    }
+}

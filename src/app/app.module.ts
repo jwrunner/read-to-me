@@ -1,34 +1,17 @@
-// Angular
-import { NgModule, ErrorHandler, Injectable } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { FormsModule } from '@angular/forms';
-import { AngularFireModule } from '@angular/fire';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-
-// Material
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  MatButtonModule, MatMenuModule, MatFormFieldModule,
-  MatInputModule, MatProgressBarModule, MatTooltipModule, MatListModule
-} from '@angular/material';
+import { NgModule, Injectable, ErrorHandler } from '@angular/core';
 
-// App
-import { environment } from '../environments/environment';
-export const firebaseConfig = environment.firebaseConfig;
 import { AppRoutingModule } from './app-routing.module';
-import { CoreModule } from './core/core.module';
-import { RouterHelperService } from './_services/router-helper.service';
-
-// Components
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 import { HeaderComponent } from './header/header.component';
-import { AddBookComponent } from './home/add-book/add-book.component';
-import { PlayerComponent } from './player/player.component';
-
+import { FirstNamePipe } from './header/first-name.pipe';
+import { MatSnackBarModule, MatProgressBarModule, MatButtonModule } from '@angular/material';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import * as Sentry from '@sentry/browser';
-import { FirstNamePipe } from './_pipes/first-name.pipe';
+import { PlayerComponent } from './player/player.component';
 
 Sentry.init({
   dsn: 'https://e983452f9c97438abf3426a607b5ead5@sentry.io/1380788'
@@ -43,34 +26,27 @@ export class SentryErrorHandler implements ErrorHandler {
   }
 }
 
-const providers: any[] = [
-  RouterHelperService,
-];
+const providers: any[] = [];
 if (environment.production) {
   providers.push(
     { provide: ErrorHandler, useClass: SentryErrorHandler });
 }
-
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     HeaderComponent,
-    AddBookComponent,
     PlayerComponent,
-    FirstNamePipe,
+    FirstNamePipe
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    AngularFireModule.initializeApp(firebaseConfig),
-    AngularFirestoreModule.enablePersistence({ experimentalTabSynchronization: true }),
-    CoreModule,
-    FormsModule,
-    MatFormFieldModule, MatInputModule, MatTooltipModule, MatListModule,
-    MatButtonModule, MatMenuModule, MatProgressBarModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    MatSnackBarModule,
+    MatProgressBarModule,
+    FontAwesomeModule,
+    MatButtonModule,
   ],
   providers,
   bootstrap: [AppComponent]

@@ -1,26 +1,27 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { of, BehaviorSubject } from 'rxjs';
+import { of, BehaviorSubject, combineLatest } from 'rxjs';
 import { switchMap, first } from 'rxjs/operators';
+import { RxfirestoreAuthService } from '@r2m-common/services/rxfirestore-auth.service';
+import { IBook } from '@r2m-common/interfaces/book.interface';
+import { IChapter } from '@r2m-common/interfaces/chapter.interface';
+import { RouterHelperService } from '@r2m-common/services/router-helper.service';
 
-import { RouterHelperService } from '../../_services/router-helper.service';
-import { IBook } from 'src/app/_types/book.interface';
-import { IChapter } from 'src/app/_types/chapter.interface';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class BookService {
 
     bookId: string;
-    private _book = new BehaviorSubject<IBook>({ id: '...', title: '', ownerId: null, ownerName: '', dateCreated: null, pages: 0 });
+    private _book = new BehaviorSubject<IBook>({ id: '...', title: '...', pages: 0 });
     currentBook = this._book.asObservable();
 
     chapterId: string;
-    // tslint:disable-next-line:max-line-length
-    private _chapter = new BehaviorSubject<IChapter>({ name: null, ownerId: null, ownerName: null, bookId: null, dateCreated: null, pages: 0 });
+    private _chapter = new BehaviorSubject<IChapter>({ name: '...', pages: 0 });
     currentChapter = this._chapter.asObservable();
 
     constructor(
-        private afs: AngularFirestore,
+        private db: RxfirestoreAuthService,
         private routerHelper: RouterHelperService,
     ) {
         this.watchBookId();
@@ -32,7 +33,7 @@ export class BookService {
             switchMap(bookId => {
                 if (bookId) {
                     this.bookId = bookId;
-                    return this.afs.doc<IBook>(`books/${bookId}`).valueChanges();
+                    return this.db.doc$<IBook>(`books/${bookId}`);
                 } else {
                     return of(null);
                 }
@@ -46,11 +47,11 @@ export class BookService {
     }
 
     private watchChapterId() {
-        this.routerHelper.chapterId.pipe(
-            switchMap(chapterId => {
+        combineLatest([this.routerHelper.bookId, this.routerHelper.chapterId]).pipe(
+            switchMap(([bookId, chapterId]) => {
                 if (chapterId) {
                     this.chapterId = chapterId;
-                    return this.afs.doc<IChapter>(`chapters/${chapterId}`).valueChanges();
+                    return this.db.doc$<IChapter>(`books/${bookId}/chapters/${chapterId}`);
                 } else {
                     return of(null);
                 }

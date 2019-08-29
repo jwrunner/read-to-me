@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'rtm-book-home',
+  selector: 'r2m-book-home',
   templateUrl: './book-home.component.html',
   styleUrls: ['./book-home.component.scss']
 })

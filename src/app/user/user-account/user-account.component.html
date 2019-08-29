@@ -1,0 +1,5 @@
+<div class="p-2" *ngIf="db.user | async as user">
+  <h3 class="my-2">{{ user.displayName }}</h3>
+
+  <button mat-raised-button (click)="db.signOut()" style="margin: 10px 5px 40px 0;" i18n="@@logOut">Log Out</button>
+</div>

@@ -1,6 +1,5 @@
 {
   "projects": {
-    "production": "r2m-app",
     "default": "read-books-to-me"
   }
 }

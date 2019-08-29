@@ -1,0 +1,36 @@
+body {
+  padding-top: 56px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 400;
+  margin: 0;
+}
+
+hr {
+  margin: 15px 0;
+  opacity: 0.6;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  padding: 0 8px;
+}
+
+footer {
+  background: #ededed;
+  padding: 20px 8px;
+}
+
+.snackbar-error {
+  color: yellow;
+}

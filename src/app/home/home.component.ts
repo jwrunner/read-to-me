@@ -1,24 +1,28 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../core/auth.service';
-import { IBook } from '../_types/book.interface';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+
+import { IBook } from '@r2m-common/interfaces/book.interface';
+import { RxfirestoreAuthService } from '@r2m-common/services/rxfirestore-auth.service';
+import { faBook, faEllipsisV, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'rtm-home',
+  selector: 'r2m-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
 
-  booksObservable: Observable<IBook[]>;
+  faBook = faBook;
+  faEllipsisV = faEllipsisV;
+  faPlus = faPlus;
+
+  books$: Observable<IBook[]>;
   addBook = false;
   date = new Date();
 
   constructor(
-    public auth: AuthService,
-    private afs: AngularFirestore,
+    public db: RxfirestoreAuthService,
   ) { }
 
   ngOnInit() {
@@ -26,29 +30,12 @@ export class HomeComponent implements OnInit {
   }
 
   private async getBooks() {
-    this.booksObservable = this.auth.user.pipe(
+    this.books$ = this.db.user.pipe(
       switchMap(user => {
         if (user) {
-          return this.afs.collection('books', ref =>
-            ref.where('ownerId', '==', user.uid)
-            .orderBy('title')
-            ).snapshotChanges().pipe(
-              map(arr => {
-                return arr.map(snap => {
-                  const data = snap.payload.doc.data() as IBook;
-                  const id = snap.payload.doc.id;
-                  return {
-                    id, ...data
-                  };
-                });
-              })
-            );
-        } else {
-          return of(null);
-        }
+          return this.db.col$('books', { where: { fieldPath: 'createdBy', opStr: '==', value: user.uid }, orderBy: { value: 'title' } });
+        } else { return of(null); }
       })
     );
   }
-
-
 }

@@ -1,15 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { PageNumberDialogComponent } from './page-number-dialog/page-number-dialog.component';
-import { IQueuedPage } from 'src/app/_types/queued-page.interface';
-import { RouterHelperService } from 'src/app/_services/router-helper.service';
+import { IQueuedPage } from '@r2m-common/interfaces/queued-page.interface';
+import { RouterHelperService } from '@r2m-common/services/router-helper.service';
+import { faPlus, faChevronUp, faChevronDown, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'rtm-uploader',
+  selector: 'r2m-uploader',
   templateUrl: './uploader.component.html',
   styleUrls: ['./uploader.component.scss']
 })
 export class UploaderComponent implements OnInit {
+
+  faPlus = faPlus;
+  faChevronUp = faChevronUp;
+  faChevronDown = faChevronDown;
+  faEdit = faEdit;
+
   pageNumber = 1;
   isHovering: boolean;
 

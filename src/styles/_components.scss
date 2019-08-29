@@ -1,0 +1,38 @@
+.custom-scrollbar {
+  @include min-width($lg) {
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: 0 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #a9a9a9;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: #888;
+    }
+  }
+}
+
+.overflow-x {
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: auto;
+}
+
+.form-field--full-width {
+
+  &,
+  >* {
+    width: 100%;
+  }
+}
+
+.centered-400-column {
+  max-width: 400px;
+  margin: 0 auto;
+}

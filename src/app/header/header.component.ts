@@ -1,16 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../core/auth.service';
+import { Component, AfterViewInit } from '@angular/core';
+import { SwUpdate } from '@angular/service-worker';
+import { RxfirestoreAuthService } from '@r2m-common/services/rxfirestore-auth.service';
 
 @Component({
-  selector: 'rtm-header',
+  selector: 'r2m-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements AfterViewInit {
 
   constructor(
-    public auth: AuthService,
+    public db: RxfirestoreAuthService,
+    private swUpdate: SwUpdate,
   ) { }
 
-  ngOnInit() { }
+  ngAfterViewInit() {
+    this.subscribeToUpdates();
+  }
+
+  private subscribeToUpdates() {
+    if (this.swUpdate.isEnabled) {
+      this.swUpdate.available.subscribe(() => { window.location.reload(); });
+    }
+  }
+
 }

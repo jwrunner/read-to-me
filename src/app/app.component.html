@@ -1,6 +1,11 @@
-<div class="d-flex flex-column" style="height: 100%;">
-  <div class="custom-scrollbar overflow-x flex-grow-1">
+<r2m-header></r2m-header>
+<div class="d-flex flex-column" style="background: #f8f8f8; min-height: 100%;">
     <router-outlet></router-outlet>
-  </div>
-  <rtm-player></rtm-player>
+    <!-- style="background: #efefef;" -->
+    <div class="mt-auto px-2 pb-2 pt-5 small">
+        <br /><br />
+        Built by Jacob Bowdoin.
+    </div>
 </div>
+
+<r2m-player></r2m-player>

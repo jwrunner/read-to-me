@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { RxfirestoreAuthService } from '@r2m-common/services/rxfirestore-auth.service';
+import { IBook } from '@r2m-common/interfaces/book.interface';
+import { MatSnackBar } from '@angular/material';
 
-import { AuthService } from 'src/app/core/auth.service';
-import { IBook } from 'src/app/_types/book.interface';
 
 @Component({
-  selector: 'rtm-add-book',
+  selector: 'r2m-add-book',
   templateUrl: './add-book.component.html',
   styleUrls: ['./add-book.component.scss']
 })
@@ -17,8 +17,8 @@ export class AddBookComponent implements OnInit {
 
   constructor(
     private router: Router,
-    public auth: AuthService,
-    private afs: AngularFirestore,
+    private db: RxfirestoreAuthService,
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit() {
@@ -29,17 +29,27 @@ export class AddBookComponent implements OnInit {
       this.addingBook = true;
 
       const capitalizedBookTitle = this.bookTitle.replace(/^\w/, c => c.toUpperCase()).trim();
-      const { uid, displayName } = await this.auth.getUser();
       const bookData: IBook = {
         title: capitalizedBookTitle,
-        ownerId: uid,
-        ownerName: displayName || null,
-        dateCreated: Date.now(),
         pages: 0,
       };
 
-      const docRef = await this.afs.collection('books').add(bookData);
-      this.router.navigate([`/book/${docRef.id}`]);
+      const bookId = this.bookTitle
+        .substr(0, 25)
+        .trim()
+        .replace(/\s+/g, '-')
+        .toLowerCase();
+
+      if (await this.db.docExists(`books/${bookId}`)) {
+        this.snackBar.open(`A book already exists with that name. Please choose another name`, '', {
+          duration: 6000,
+          panelClass: 'snackbar-error'
+        });
+        this.addingBook = false;
+      } else {
+        await this.db.set<IBook>(`books/${bookId}`, bookData);
+        this.router.navigate([`/${bookId}`]);
+      }
     }
   }
 }

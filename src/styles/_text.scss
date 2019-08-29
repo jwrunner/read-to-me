@@ -1,0 +1,43 @@
+// Text Utilities
+.b {
+  font-weight: bold !important;
+}
+
+.text-muted {
+  opacity: 0.8;
+}
+
+.text-nowrap {
+  white-space: nowrap;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.truncate {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+}
+
+small,
+.small {
+  font-size: 80%;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+a {
+  color: $r2m-primary;
+  // text-decoration: none;
+}
+
+.text-sm-left {
+  @include min-width($sm) {
+    text-align: left;
+  }
+}

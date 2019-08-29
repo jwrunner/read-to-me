@@ -6,7 +6,7 @@ import { ChaptersListComponent } from './chapters-list/chapters-list.component';
 
 const routes: Routes = [
   {
-    path: ':bookId',
+    path: '',
     component: BooksHomeComponent,
     children: [
       {

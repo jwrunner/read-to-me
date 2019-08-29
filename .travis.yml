@@ -16,7 +16,7 @@ before_install:
 jobs:
   include:
     - stage: deploy-dev
-      if: branch = develop
+      if: branch = develop AND type = pull_request
       before_script:
         - npm install -g firebase-tools
         - npm install -g @angular/cli

@@ -2,8 +2,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireStorageModule } from '@angular/fire/storage';
 import {
   MatButtonModule, MatFormFieldModule, MatInputModule,
   MatSnackBarModule, MatProgressBarModule, MatListModule, MatMenuModule, MatDialogModule
@@ -11,10 +9,9 @@ import {
 
 // App Misc
 import { BookRoutingModule } from './book-routing.module';
-import { BookService } from './_services/book.service';
-import { PrefixChapterNumberPipe } from '../_pipes/prefix-chapter-number.pipe';
-import { ClickStopPropagationDirective } from '../_directives/clickStopPropagation.directive';
-import { DropZoneDirective } from '../_directives/drop-zone.directive';
+import { ClickStopPropagationDirective } from '@r2m-common/directives/clickStopPropagation.directive';
+import { DropZoneDirective } from '@r2m-common/directives/drop-zone.directive';
+import { PrefixChapterNumberPipe } from '@r2m-common/pipes/prefix-chapter-number.pipe';
 
 // Components
 import { BooksHomeComponent } from './book-home/book-home.component';
@@ -24,6 +21,7 @@ import { ChapterHomeComponent } from './chapter-home/chapter-home.component';
 import { UploaderComponent } from './uploader/uploader.component';
 import { UploadTaskComponent } from './uploader/upload-task/upload-task.component';
 import { PageNumberDialogComponent } from './uploader/page-number-dialog/page-number-dialog.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 @NgModule({
@@ -42,8 +40,6 @@ import { PageNumberDialogComponent } from './uploader/page-number-dialog/page-nu
   imports: [
     CommonModule,
     BookRoutingModule,
-    AngularFireStorageModule,
-    AngularFirestoreModule,
     FormsModule,
     MatButtonModule,
     MatFormFieldModule,
@@ -53,12 +49,10 @@ import { PageNumberDialogComponent } from './uploader/page-number-dialog/page-nu
     MatListModule,
     MatMenuModule,
     MatDialogModule,
+    FontAwesomeModule,
   ],
   entryComponents: [
     PageNumberDialogComponent,
   ],
-  providers: [
-    BookService,
-  ]
 })
 export class BookModule { }

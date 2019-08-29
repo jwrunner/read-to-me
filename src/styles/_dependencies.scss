@@ -1,0 +1,6 @@
+// Import this file into any scss file that needs access to variable, breakpoints, and other dependencies
+@import '~@angular/material/theming';
+
+@import 'dependencies/colors';
+@import 'dependencies/variables';
+@import 'dependencies/breakpoints';

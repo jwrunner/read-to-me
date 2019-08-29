@@ -1,12 +1,15 @@
 # Service Worker Notes
-Service worker automatically gets added for production builds
+Angular automatically manages and adds Service worker for production builds.
 
 ## Setup History
 Consulted [Angular Service Worker docs](https://angular.io/guide/service-worker-getting-started) and https://dzone.com/articles/developing-pwa-using-angular-7 for initial setup.
 
-## To Test the Service Worker
+## Safari + Firebase Upload + Service Worker Bug Fix
+Due to a bug on Safari with Firebase uploads when using service workers, the `dist/ngsw-worker.js` file must be patched after being built and before being published. See https://github.com/angular/angular/issues/23244 for more information on fixing the bug.
+
+## To Test the Service Worker locally
 1. `ng build --prod`
-2. `http-server -p 8080 -c-1 dist`
+2. `http-server -p 8080 -c-1 dist` (requires http-server installed globally)
 
 ## Learn More
 https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API

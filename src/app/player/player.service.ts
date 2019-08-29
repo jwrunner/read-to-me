@@ -1,20 +1,16 @@
 import { Injectable } from '@angular/core';
-import { IPage } from '../_types/page.interface';
-
-import assign from 'lodash/assign';
 import { BehaviorSubject } from 'rxjs';
+import assign from 'lodash/assign';
+import { IPage } from '@r2m-common/interfaces/page.interface';
 
 export class CurrentPage {
   id?: string;
-  bookId: string;
   bookTitle: string;
-  chapterId: string;
   chapterName: string;
   pageNumber: number;
   dateCreated: number;
   text: string;
   audioPath: string;
-  mt: string;
 
   constructor(pageData: any) {
     assign(this, pageData);
